@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-12T03:38:25+08:00",
-  "next_id": 10,
+  "updated_at": "2026-10-12T03:57:15+08:00",
+  "next_id": 15,
   "fares": [
     {
       "id": 1,
@@ -180,6 +180,106 @@
       "price_cny": 1223,
       "notes": "高于约1000门槛；直飞南航约1517",
       "found_at": "2026-10-12T03:38:25+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 10,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-15",
+      "return_date": "",
+      "airline": "春秋航空",
+      "stops": "直飞",
+      "price_cny": 740,
+      "notes": "低于印尼约1000；低价页约730；长周末",
+      "found_at": "2026-10-12T03:57:15+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 11,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "DMK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-04",
+      "return_date": "",
+      "airline": "泰国狮航",
+      "stops": "直飞",
+      "price_cny": 524,
+      "notes": "略超泰国500；春节前；往返12/4-12/11约970",
+      "found_at": "2026-10-12T03:57:15+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 12,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-10-15",
+      "return_date": "",
+      "airline": "深航",
+      "stops": "直飞",
+      "price_cny": 667,
+      "notes": "略超越南600",
+      "found_at": "2026-10-12T03:57:15+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 13,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "越南",
+      "destination_city": "河内",
+      "destination_airport": "HAN",
+      "trip_type": "单程",
+      "depart_date": "2026-10-19",
+      "return_date": "",
+      "airline": "香港快运",
+      "stops": "直飞",
+      "price_cny": 650,
+      "notes": "略超越南600",
+      "found_at": "2026-10-12T03:57:15+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 14,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-10-15",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 756,
+      "notes": "远高于马来400",
+      "found_at": "2026-10-12T03:57:15+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
