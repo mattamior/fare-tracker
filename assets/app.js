@@ -4,6 +4,7 @@
   const STORAGE_KEY = "fare-tracker:local-fares";
   const SETTINGS_KEY = "fare-tracker:settings";
   const HIDDEN_FILE_KEY = "fare-tracker:hidden-file-ids";
+  const UI_KEY = "fare-tracker:ui";
 
   const DEFAULT_SETTINGS = {
     version: 1,
@@ -30,10 +31,18 @@
     localNextId: 1,
     hiddenFileIds: new Set(),
     settings: structuredClone(DEFAULT_SETTINGS),
-    filter: { country: "", dealOnly: false, q: "" },
+    filter: {
+      country: "",
+      origin: "",
+      deal: "all",
+      q: "",
+      maxPrice: "",
+      showExamples: false,
+    },
     sort: { key: "found_at", dir: "desc" },
     editingId: null,
     editingSource: null,
+    prefsCollapsed: false,
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -48,7 +57,7 @@
   }
 
   function normalizeOrigin(origin) {
-    if (Array.isArray(origin)) return origin.filter(Boolean);
+    if (Array.isArray(origin)) return origin.filter(Boolean).map((s) => String(s).toUpperCase());
     if (typeof origin === "string" && origin.trim()) {
       return origin.split(/[,/|+\s]+/).map((s) => s.trim().toUpperCase()).filter(Boolean);
     }
@@ -56,16 +65,12 @@
   }
 
   function originLabel(origin) {
-    const map = state.settings.origins_map || {};
-    return normalizeOrigin(origin)
-      .map((c) => (map[c] ? `${c}` : c))
-      .join("/");
+    return normalizeOrigin(origin).join("/");
   }
 
   function dealBarFor(country) {
     const bars = state.settings.deal_bars || {};
     if (bars[country] != null) return Number(bars[country]);
-    // fuzzy match
     const key = Object.keys(bars).find((k) => country && (country.includes(k) || k.includes(country)));
     return key != null ? Number(bars[key]) : null;
   }
@@ -76,6 +81,16 @@
     const bar = dealBarFor(fare.destination_country);
     if (bar == null || fare.price_cny == null || Number.isNaN(Number(fare.price_cny))) return false;
     return Number(fare.price_cny) <= bar;
+  }
+
+  function routeKey(fare) {
+    const airport = (fare.destination_airport || "").toUpperCase();
+    const city = fare.destination_city || "";
+    return `${fare.destination_country}|${airport || city}|${fare.trip_type || ""}`;
+  }
+
+  function countryKey(fare) {
+    return fare.destination_country || "未知";
   }
 
   function normalizeFare(raw, source) {
@@ -102,13 +117,6 @@
       source,
     };
     if (Number.isNaN(fare.price_cny)) fare.price_cny = 0;
-    // if file already has meets_deal_bar and no override, keep auto
-    if (raw.meets_deal_bar === true || raw.meets_deal_bar === false) {
-      // only treat as override if explicitly flagged
-      if (raw.deal_bar_override === true || raw.deal_bar_override === false) {
-        fare.deal_bar_override = raw.deal_bar_override;
-      }
-    }
     fare.meets_deal_bar = computeMeetsDeal(fare);
     return fare;
   }
@@ -118,9 +126,50 @@
       .filter((f) => !state.hiddenFileIds.has(f.id))
       .map((f) => normalizeFare(f, "file"));
     const local = state.localFares.map((f) => normalizeFare(f, "local"));
-    // local overrides file if same id? Use composite key. Prefer showing both unless same content.
-    // Merge by unique key: source+id
     return [...file, ...local];
+  }
+
+  /** Build historical min maps from ALL non-example fares (for fair comparison). */
+  function buildHistoryMaps() {
+    const pool = allFares().filter((f) => !f.is_example);
+    const byRoute = new Map();
+    const byCountry = new Map();
+    for (const f of pool) {
+      const rk = routeKey(f);
+      const ck = countryKey(f);
+      const p = Number(f.price_cny);
+      if (!byRoute.has(rk) || p < byRoute.get(rk).price) byRoute.set(rk, { price: p, fare: f });
+      if (!byCountry.has(ck) || p < byCountry.get(ck).price) byCountry.set(ck, { price: p, fare: f });
+    }
+    return { byRoute, byCountry };
+  }
+
+  function compareInfo(fare, hist) {
+    const bar = dealBarFor(fare.destination_country);
+    const price = Number(fare.price_cny);
+    const vsBar =
+      bar == null
+        ? null
+        : {
+            bar,
+            diff: bar - price,
+            under: price <= bar,
+            pct: bar > 0 ? Math.min(100, Math.round((price / bar) * 100)) : 0,
+          };
+    const routeMin = hist.byRoute.get(routeKey(fare));
+    const countryMin = hist.byCountry.get(countryKey(fare));
+    const isRouteBest = routeMin && routeMin.price === price && routeMin.fare.id === fare.id && routeMin.fare.source === fare.source;
+    const isCountryBest = countryMin && countryMin.price === price && countryMin.fare.id === fare.id && countryMin.fare.source === fare.source;
+    // Also treat as best if same price (tied)
+    const isRouteBestLoose = routeMin && price <= routeMin.price;
+    const isCountryBestLoose = countryMin && price <= countryMin.price;
+    return {
+      vsBar,
+      routeMin: routeMin ? routeMin.price : null,
+      countryMin: countryMin ? countryMin.price : null,
+      isRouteBest: isRouteBest || isRouteBestLoose,
+      isCountryBest: isCountryBest || isCountryBestLoose,
+    };
   }
 
   function saveLocal() {
@@ -130,6 +179,14 @@
     );
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
     localStorage.setItem(HIDDEN_FILE_KEY, JSON.stringify([...state.hiddenFileIds]));
+    localStorage.setItem(
+      UI_KEY,
+      JSON.stringify({
+        showExamples: state.filter.showExamples,
+        prefsCollapsed: state.prefsCollapsed,
+        sort: state.sort,
+      })
+    );
   }
 
   function loadLocal() {
@@ -137,18 +194,30 @@
       const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
       if (raw && Array.isArray(raw.fares)) {
         state.localFares = raw.fares;
-        state.localNextId = Number(raw.next_id) || (Math.max(0, ...raw.fares.map((f) => f.id)) + 1);
+        state.localNextId = Number(raw.next_id) || Math.max(0, ...raw.fares.map((f) => f.id)) + 1;
       }
     } catch (_) {}
     try {
       const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "null");
       if (s && s.deal_bars) {
-        state.settings = { ...structuredClone(DEFAULT_SETTINGS), ...s, deal_bars: { ...DEFAULT_SETTINGS.deal_bars, ...s.deal_bars } };
+        state.settings = {
+          ...structuredClone(DEFAULT_SETTINGS),
+          ...s,
+          deal_bars: { ...DEFAULT_SETTINGS.deal_bars, ...s.deal_bars },
+        };
       }
     } catch (_) {}
     try {
       const h = JSON.parse(localStorage.getItem(HIDDEN_FILE_KEY) || "[]");
       if (Array.isArray(h)) state.hiddenFileIds = new Set(h.map(Number));
+    } catch (_) {}
+    try {
+      const ui = JSON.parse(localStorage.getItem(UI_KEY) || "null");
+      if (ui) {
+        if (typeof ui.showExamples === "boolean") state.filter.showExamples = ui.showExamples;
+        if (typeof ui.prefsCollapsed === "boolean") state.prefsCollapsed = ui.prefsCollapsed;
+        if (ui.sort?.key) state.sort = ui.sort;
+      }
     } catch (_) {}
   }
 
@@ -161,11 +230,11 @@
       if (faresRes.ok) {
         const data = await faresRes.json();
         state.fileFares = Array.isArray(data.fares) ? data.fares : [];
-        state.fileNextId = Number(data.next_id) || (Math.max(0, ...state.fileFares.map((f) => f.id || 0)) + 1);
+        state.fileNextId =
+          Number(data.next_id) || Math.max(0, ...state.fileFares.map((f) => f.id || 0)) + 1;
       }
       if (settingsRes.ok) {
         const s = await settingsRes.json();
-        // file settings as base, then local overrides already applied in loadLocal — merge carefully
         const localSaved = localStorage.getItem(SETTINGS_KEY);
         if (!localSaved) {
           state.settings = {
@@ -176,7 +245,6 @@
             origins_map: { ...DEFAULT_SETTINGS.origins_map, ...(s.origins_map || {}) },
           };
         } else {
-          // still refresh preferences/notes from file if present
           state.settings.preferences = {
             ...state.settings.preferences,
             ...(s.preferences || {}),
@@ -189,16 +257,22 @@
         }
       }
     } catch (err) {
-      console.warn("加载 data/*.json 失败（可用 file:// 或先启动静态服务）", err);
+      console.warn("加载 data/*.json 失败", err);
       toast("未能读取 data/fares.json，请用本地服务打开");
     }
   }
 
   function filteredSorted() {
     let list = allFares();
-    const { country, dealOnly, q } = state.filter;
+    const { country, origin, deal, q, maxPrice, showExamples } = state.filter;
+    if (!showExamples) list = list.filter((f) => !f.is_example);
     if (country) list = list.filter((f) => f.destination_country === country);
-    if (dealOnly) list = list.filter((f) => f.meets_deal_bar);
+    if (origin) list = list.filter((f) => normalizeOrigin(f.origin).includes(origin));
+    if (deal === "deal") list = list.filter((f) => f.meets_deal_bar);
+    if (deal === "normal") list = list.filter((f) => !f.meets_deal_bar);
+    if (maxPrice !== "" && maxPrice != null && !Number.isNaN(Number(maxPrice))) {
+      list = list.filter((f) => Number(f.price_cny) <= Number(maxPrice));
+    }
     if (q) {
       const needle = q.toLowerCase();
       list = list.filter((f) => {
@@ -222,14 +296,8 @@
     list.sort((a, b) => {
       let av = a[key];
       let bv = b[key];
-      if (key === "origin") {
-        av = originLabel(a.origin);
-        bv = originLabel(b.origin);
-      }
       if (key === "price_cny") {
-        av = Number(av) || 0;
-        bv = Number(bv) || 0;
-        return (av - bv) * mul;
+        return ((Number(av) || 0) - (Number(bv) || 0)) * mul;
       }
       if (key === "found_at" || key === "depart_date" || key === "return_date") {
         av = av || "";
@@ -264,46 +332,6 @@
     }
   }
 
-  function renderPrefs() {
-    const p = state.settings.preferences;
-    const bars = state.settings.deal_bars;
-    const notes = state.settings.deal_bars_note || {};
-    $("#prefs-list").innerHTML = `
-      <li>出发：${p.origin_label || "珠三角+香港"}</li>
-      <li>重点国家：${(p.priority_countries || []).join(" / ")}</li>
-      <li>${p.schedule_note || ""}</li>
-      <li>${p.spring_festival_note || ""}</li>
-      <li>观察窗口：${p.watch_window || ""}</li>
-    `;
-    $("#bars").innerHTML = Object.entries(bars)
-      .map(([k, v]) => {
-        const note = notes[k] ? ` · ${notes[k]}` : "";
-        return `<span class="chip">${k} ≤ <strong>¥${v}</strong>${note}</span>`;
-      })
-      .join("");
-  }
-
-  function renderStats(list) {
-    const all = allFares();
-    const deals = all.filter((f) => f.meets_deal_bar).length;
-    const min = list.length ? Math.min(...list.map((f) => f.price_cny)) : null;
-    $("#stat-total").textContent = String(all.length);
-    $("#stat-deals").textContent = String(deals);
-    $("#stat-min").textContent = min == null ? "—" : `¥${min}`;
-  }
-
-  function renderCountryFilter() {
-    const countries = [...new Set(allFares().map((f) => f.destination_country).filter(Boolean))].sort((a, b) =>
-      a.localeCompare(b, "zh")
-    );
-    const sel = $("#filter-country");
-    const cur = state.filter.country;
-    sel.innerHTML =
-      `<option value="">全部国家</option>` +
-      countries.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join("");
-    sel.value = cur;
-  }
-
   function escapeHtml(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -315,42 +343,177 @@
     return escapeHtml(s).replace(/'/g, "&#39;");
   }
 
+  function renderPrefs() {
+    const p = state.settings.preferences;
+    const bars = state.settings.deal_bars;
+    const notes = state.settings.deal_bars_note || {};
+    $("#prefs-list").innerHTML = `
+      <li>出发：${escapeHtml(p.origin_label || "珠三角+香港")}</li>
+      <li>重点国家：${escapeHtml((p.priority_countries || []).join(" / "))}</li>
+      <li>${escapeHtml(p.schedule_note || "")}</li>
+      <li>${escapeHtml(p.spring_festival_note || "")}</li>
+      <li>观察窗口：${escapeHtml(p.watch_window || "")}</li>
+    `;
+    $("#bars").innerHTML = Object.entries(bars)
+      .map(([k, v]) => {
+        const note = notes[k] ? ` · ${notes[k]}` : "";
+        return `<span class="chip">${escapeHtml(k)} ≤ <strong>¥${v}</strong>${escapeHtml(note)}</span>`;
+      })
+      .join("");
+    const prefs = $(".prefs");
+    prefs.classList.toggle("collapsed", state.prefsCollapsed);
+    $("#prefs-toggle").setAttribute("aria-expanded", String(!state.prefsCollapsed));
+  }
+
+  function renderStats(list) {
+    const all = allFares();
+    const real = all.filter((f) => !f.is_example);
+    const deals = real.filter((f) => f.meets_deal_bar).length;
+    const min = list.length ? Math.min(...list.map((f) => f.price_cny)) : null;
+    $("#stat-real").textContent = String(real.length);
+    $("#stat-deals").textContent = String(deals);
+    $("#stat-min").textContent = min == null ? "—" : `¥${min}`;
+    $("#stat-filtered").textContent = String(list.length);
+  }
+
+  function renderCountryFilter() {
+    const pool = allFares().filter((f) => state.filter.showExamples || !f.is_example);
+    const countries = [...new Set(pool.map((f) => f.destination_country).filter(Boolean))].sort((a, b) =>
+      a.localeCompare(b, "zh")
+    );
+    const sel = $("#filter-country");
+    const cur = state.filter.country;
+    sel.innerHTML =
+      `<option value="">全部国家</option>` +
+      countries.map((c) => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join("");
+    sel.value = cur;
+  }
+
+  function syncFilterControls() {
+    $("#filter-country").value = state.filter.country;
+    $("#filter-origin").value = state.filter.origin;
+    $("#filter-deal").value = state.filter.deal;
+    $("#filter-q").value = state.filter.q;
+    $("#filter-max-price").value = state.filter.maxPrice;
+    $("#filter-examples").checked = state.filter.showExamples;
+    const sortVal = `${state.sort.key}:${state.sort.dir}`;
+    const sortSel = $("#filter-sort");
+    if ([...sortSel.options].some((o) => o.value === sortVal)) sortSel.value = sortVal;
+    else sortSel.value = "found_at:desc";
+
+    $$("th[data-sort]").forEach((th) => {
+      const active = th.dataset.sort === state.sort.key;
+      th.classList.toggle("active-sort", active);
+      const s = th.querySelector(".sort");
+      if (s) s.textContent = active ? (state.sort.dir === "asc" ? "↑" : "↓") : "";
+    });
+
+    const pills = [];
+    if (state.filter.country) pills.push(`国家：${state.filter.country}`);
+    if (state.filter.origin) pills.push(`出发：${state.filter.origin}`);
+    if (state.filter.deal === "deal") pills.push("只看好价");
+    if (state.filter.deal === "normal") pills.push("只看普通");
+    if (state.filter.maxPrice !== "") pills.push(`≤ ¥${state.filter.maxPrice}`);
+    if (state.filter.q) pills.push(`搜索：${state.filter.q}`);
+    if (state.filter.showExamples) pills.push("含示例");
+    const box = $("#active-filters");
+    if (pills.length) {
+      box.hidden = false;
+      box.innerHTML = pills.map((p) => `<span class="filter-pill">${escapeHtml(p)}</span>`).join("");
+    } else {
+      box.hidden = true;
+      box.innerHTML = "";
+    }
+  }
+
+  function priceCompareHtml(fare, cmp) {
+    const parts = [];
+    if (cmp.vsBar) {
+      const { bar, diff, under, pct } = cmp.vsBar;
+      const cls = under ? "under" : "over";
+      const label = under
+        ? `<span class="save">低于门槛 ¥${Math.abs(diff)}</span>`
+        : `<span class="over">超门槛 ¥${Math.abs(diff)}</span>`;
+      parts.push(`<div class="price-meta">门槛 ¥${bar} · ${label}</div>`);
+      parts.push(
+        `<div class="price-bar ${cls}" title="相对门槛 ${pct}%"><i style="width:${Math.min(100, pct)}%"></i></div>`
+      );
+    }
+    const histBits = [];
+    if (cmp.routeMin != null) {
+      if (cmp.isRouteBest) histBits.push(`<span class="best">同航线历史最低</span>`);
+      else histBits.push(`同航线最低 ¥${cmp.routeMin}`);
+    }
+    if (cmp.countryMin != null && !(cmp.isRouteBest && cmp.routeMin === cmp.countryMin)) {
+      if (cmp.isCountryBest) histBits.push(`<span class="best">同国家历史最低</span>`);
+      else histBits.push(`同国家最低 ¥${cmp.countryMin}`);
+    }
+    if (histBits.length) {
+      parts.push(`<div class="hist-hint ${cmp.isRouteBest || cmp.isCountryBest ? "best" : ""}">${histBits.join(" · ")}</div>`);
+    }
+    return parts.join("");
+  }
+
+  function badgesHtml(fare, cmp) {
+    const badges = [];
+    if (fare.meets_deal_bar) badges.push(`<span class="badge badge-deal">好价</span>`);
+    else badges.push(`<span class="badge badge-normal">普通</span>`);
+    if (cmp.isRouteBest || cmp.isCountryBest) badges.push(`<span class="badge badge-best">历史低</span>`);
+    if (fare.is_example) badges.push(`<span class="badge badge-example">示例</span>`);
+    if (fare.source === "local") badges.push(`<span class="badge badge-local">本地</span>`);
+    return badges.join("");
+  }
+
   function renderTable() {
     const list = filteredSorted();
+    const hist = buildHistoryMaps();
     renderStats(list);
     renderCountryFilter();
+    syncFilterControls();
+
     const tbody = $("#fare-tbody");
+    const cards = $("#fare-cards");
+
     if (!list.length) {
-      tbody.innerHTML = `<tr><td colspan="9"><div class="empty">暂无记录。可新增，或用 CLI 写入 data/fares.json 后刷新。</div></td></tr>`;
+      const hasAny = allFares().length > 0;
+      const emptyMsg = hasAny
+        ? `<div class="empty"><strong>没有符合筛选的记录</strong>试试清空筛选，或打开「显示示例」。</div>`
+        : `<div class="empty"><strong>暂无真实票价记录</strong>行程管家写入 data/fares.json 并推送后刷新即可；也可点「＋ 新增」。</div>`;
+      tbody.innerHTML = `<tr><td colspan="7">${emptyMsg}</td></tr>`;
+      cards.innerHTML = emptyMsg;
       renderChart([]);
+      renderCompare([]);
       return;
     }
+
     tbody.innerHTML = list
       .map((f) => {
+        const cmp = compareInfo(f, hist);
         const dest = [f.destination_city, f.destination_airport].filter(Boolean).join(" · ");
         const dates =
           f.trip_type === "往返"
             ? `${formatDate(f.depart_date)} → ${formatDate(f.return_date)}`
             : formatDate(f.depart_date);
-        const badges = [
-          f.meets_deal_bar
-            ? `<span class="badge badge-deal">好价</span>`
-            : `<span class="badge badge-normal">普通</span>`,
-          f.is_example ? `<span class="badge badge-example">示例</span>` : "",
+        const rowClass = [
+          f.meets_deal_bar ? "deal-row" : "",
+          f.is_example ? "example-row" : "",
         ]
           .filter(Boolean)
           .join(" ");
-        return `<tr class="${f.meets_deal_bar ? "deal-row" : ""}" data-id="${f.id}" data-source="${f.source}">
+        return `<tr class="${rowClass}" data-id="${f.id}" data-source="${f.source}">
           <td>
-            <div><strong>${escapeHtml(originLabel(f.origin))}</strong> → ${escapeHtml(f.destination_country)}</div>
-            <div class="muted">${escapeHtml(dest || "—")} · ${escapeHtml(f.trip_type)}</div>
-            <div style="margin-top:4px">${badges}</div>
+            <div class="route-main">${escapeHtml(originLabel(f.origin))} → ${escapeHtml(f.destination_country)}</div>
+            <div class="route-sub">${escapeHtml(dest || "—")} · ${escapeHtml(f.trip_type)}</div>
+            <div class="badge-row">${badgesHtml(f, cmp)}</div>
           </td>
           <td>${escapeHtml(dates)}</td>
           <td>${escapeHtml(f.airline || "—")}<div class="muted">${escapeHtml(f.stops || "—")}</div></td>
-          <td class="price ${f.meets_deal_bar ? "deal" : ""}">¥${Number(f.price_cny).toLocaleString("zh-CN")}</td>
+          <td class="price-cell">
+            <div class="price ${f.meets_deal_bar ? "deal" : ""}">¥${Number(f.price_cny).toLocaleString("zh-CN")}</div>
+            ${priceCompareHtml(f, cmp)}
+          </td>
           <td class="muted">${escapeHtml(formatFoundAt(f.found_at))}</td>
-          <td class="muted">${escapeHtml(f.notes || "—")}</td>
+          <td class="muted"><div class="notes-clamp" title="${escapeAttr(f.notes || "")}">${escapeHtml(f.notes || "—")}</div></td>
           <td>
             <div class="row-actions">
               <button class="btn btn-sm" data-act="edit">编辑</button>
@@ -360,13 +523,101 @@
         </tr>`;
       })
       .join("");
+
+    cards.innerHTML = list
+      .map((f) => {
+        const cmp = compareInfo(f, hist);
+        const dest = [f.destination_city, f.destination_airport].filter(Boolean).join(" · ");
+        const dates =
+          f.trip_type === "往返"
+            ? `${formatDate(f.depart_date)} → ${formatDate(f.return_date)}`
+            : formatDate(f.depart_date);
+        let compareBits = "";
+        if (cmp.vsBar) {
+          const { bar, diff, under } = cmp.vsBar;
+          compareBits += under
+            ? `门槛 ¥${bar} · <span class="save">省 ¥${Math.abs(diff)}</span>`
+            : `门槛 ¥${bar} · <span class="over">超 ¥${Math.abs(diff)}</span>`;
+        }
+        if (cmp.routeMin != null) {
+          compareBits += (compareBits ? "<br>" : "") +
+            (cmp.isRouteBest ? "同航线历史最低" : `同航线最低 ¥${cmp.routeMin}`);
+        }
+        return `<article class="fare-card ${f.meets_deal_bar ? "deal" : ""} ${f.is_example ? "example" : ""}" data-id="${f.id}" data-source="${f.source}">
+          <div class="fare-card-top">
+            <div>
+              <div class="fare-card-route">${escapeHtml(originLabel(f.origin))} → ${escapeHtml(f.destination_country)}</div>
+              <div class="badge-row" style="margin-top:6px">${badgesHtml(f, cmp)}</div>
+            </div>
+            <div class="fare-card-price ${f.meets_deal_bar ? "deal" : ""}">¥${Number(f.price_cny).toLocaleString("zh-CN")}</div>
+          </div>
+          <div class="fare-card-meta">
+            <div>${escapeHtml(dest || "—")} · ${escapeHtml(f.trip_type)} · ${escapeHtml(dates)}</div>
+            <div>${escapeHtml(f.airline || "—")} · ${escapeHtml(f.stops || "—")}</div>
+            <div>发现 ${escapeHtml(formatFoundAt(f.found_at))}</div>
+            ${f.notes ? `<div class="notes-clamp" style="max-width:100%">${escapeHtml(f.notes)}</div>` : ""}
+          </div>
+          ${compareBits ? `<div class="fare-card-compare">${compareBits}</div>` : ""}
+          <div class="fare-card-actions">
+            <button class="btn btn-sm" data-act="edit">编辑</button>
+            <button class="btn btn-sm btn-danger" data-act="del">删除</button>
+          </div>
+        </article>`;
+      })
+      .join("");
+
     renderChart(list);
+    renderCompare(list.filter((f) => !f.is_example));
+  }
+
+  function renderCompare(list) {
+    const box = $("#compare-body");
+    const bars = state.settings.deal_bars || {};
+    const countries = Object.keys(bars);
+    if (!countries.length) {
+      box.innerHTML = `<p class="muted">暂无门槛配置</p>`;
+      return;
+    }
+    // For each country: show lowest real fare in current filtered list (or all real if filter empty of that country)
+    const pool = list.length ? list : allFares().filter((f) => !f.is_example);
+    const rows = countries.map((c) => {
+      const bar = Number(bars[c]);
+      const fares = pool.filter((f) => f.destination_country === c);
+      if (!fares.length) {
+        return { c, bar, min: null, count: 0, dealCount: 0 };
+      }
+      const min = Math.min(...fares.map((f) => f.price_cny));
+      const dealCount = fares.filter((f) => f.meets_deal_bar).length;
+      return { c, bar, min, count: fares.length, dealCount };
+    });
+
+    box.innerHTML = rows
+      .map((r) => {
+        if (r.min == null) {
+          return `<div class="compare-row">
+            <div><div class="name">${escapeHtml(r.c)}</div><div class="sub">当前筛选无记录</div></div>
+            <div class="right"><div class="bar-label">门槛 ¥${r.bar}</div></div>
+          </div>`;
+        }
+        const under = r.min <= r.bar;
+        const diff = Math.abs(r.bar - r.min);
+        return `<div class="compare-row ${under ? "hot" : ""}">
+          <div>
+            <div class="name">${escapeHtml(r.c)}</div>
+            <div class="sub">${r.count} 条 · 好价 ${r.dealCount} · ${under ? `低于门槛 ¥${diff}` : `超门槛 ¥${diff}`}</div>
+          </div>
+          <div class="right">
+            <div class="num">¥${r.min}</div>
+            <div class="bar-label">门槛 ¥${r.bar}</div>
+          </div>
+        </div>`;
+      })
+      .join("");
   }
 
   function renderChart(list) {
     const svg = $("#chart-svg");
     const legend = $("#chart-legend");
-    // group by country: take lowest price per found_at day (or just plot each fare as point along found_at)
     if (!list.length) {
       svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="14">暂无数据可绘制趋势</text>`;
       legend.innerHTML = "";
@@ -432,7 +683,6 @@
             return `<circle cx="${xScale(t).toFixed(1)}" cy="${yScale(f.price_cny).toFixed(1)}" r="4" fill="${color}"><title>${escapeHtml(c)} ¥${f.price_cny}</title></circle>`;
           })
           .join("");
-        // bars for single points look thin; use line + dots
         return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${circles}`;
       })
       .join("");
@@ -494,7 +744,6 @@
     if (!v) return new Date().toISOString();
     const d = new Date(v);
     if (Number.isNaN(d.getTime())) return new Date().toISOString();
-    // keep +08:00 style roughly
     const offset = -d.getTimezoneOffset();
     const sign = offset >= 0 ? "+" : "-";
     const oh = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
@@ -545,7 +794,6 @@
     if (source === "local") {
       state.localFares = state.localFares.filter((f) => f.id !== id);
     } else {
-      // cannot rewrite file from browser; hide file fare + optionally clone-delete
       state.hiddenFileIds.add(id);
       toast("已从视图隐藏该文件记录（data/fares.json 需 CLI/手动改）");
     }
@@ -588,7 +836,6 @@
           state.localFares = data.local_fares;
           state.localNextId = Math.max(1, ...state.localFares.map((f) => f.id || 0)) + 1;
         } else if (Array.isArray(data.fares)) {
-          // import as local copies
           const base = state.localNextId;
           data.fares.forEach((f, i) => {
             state.localFares.push({ ...f, id: base + i, is_example: false });
@@ -626,7 +873,6 @@
           <input type="number" min="0" step="10" data-country="${escapeAttr(k)}" value="${v}"></label>`
       )
       .join("");
-    // allow add vietnam etc already there; add blank for custom
     box.insertAdjacentHTML(
       "beforeend",
       `<label class="field full">新增国家门槛
@@ -646,12 +892,49 @@
     const nc = $("#new-bar-country")?.value.trim();
     const nv = Number($("#new-bar-value")?.value);
     if (nc && !Number.isNaN(nv)) state.settings.deal_bars[nc] = nv;
-    // recompute meets flags conceptually on render
     saveLocal();
     $("#settings-modal").classList.remove("open");
     renderPrefs();
     renderTable();
     toast("门槛已保存到本地");
+  }
+
+  function handleFareAction(btn) {
+    const host = btn.closest("[data-id]");
+    if (!host) return;
+    const id = Number(host.dataset.id);
+    const source = host.dataset.source;
+    const fare = allFares().find((f) => f.id === id && f.source === source);
+    if (!fare) return;
+    if (btn.dataset.act === "edit") {
+      state.editingId = id;
+      state.editingSource = source;
+      fillForm(fare);
+      openModal(source === "file" ? "编辑（将保存为本地覆盖）" : "编辑机票记录");
+    } else if (btn.dataset.act === "del") {
+      if (confirm("确定删除这条记录？")) deleteFare(id, source);
+    }
+  }
+
+  function applySortValue(val) {
+    const [key, dir] = String(val).split(":");
+    if (key) {
+      state.sort.key = key;
+      state.sort.dir = dir === "asc" ? "asc" : "desc";
+      saveLocal();
+      renderTable();
+    }
+  }
+
+  function resetFilters() {
+    state.filter.country = "";
+    state.filter.origin = "";
+    state.filter.deal = "all";
+    state.filter.q = "";
+    state.filter.maxPrice = "";
+    // keep showExamples as user preference
+    renderTable();
+    toast("已清空筛选");
   }
 
   function bind() {
@@ -662,6 +945,7 @@
       openModal("新增机票记录");
     });
     $("#btn-close-modal").addEventListener("click", closeModal);
+    $("#btn-close-modal-2").addEventListener("click", closeModal);
     $("#modal").addEventListener("click", (e) => {
       if (e.target.id === "modal") closeModal();
     });
@@ -681,9 +965,8 @@
         return;
       }
       if (state.editingSource === "file" && state.editingId != null) {
-        // edit file fare by cloning into local and hiding original
         state.hiddenFileIds.add(state.editingId);
-        upsertLocal({ ...fare, notes: fare.notes || "" }, null);
+        upsertLocal({ ...fare }, null);
         toast("已保存为本地修改（原文件记录已隐藏）");
       } else if (state.editingId != null && state.editingSource === "local") {
         upsertLocal(fare, state.editingId);
@@ -699,47 +982,58 @@
 
     $("#fare-tbody").addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-act]");
-      if (!btn) return;
-      const tr = btn.closest("tr");
-      const id = Number(tr.dataset.id);
-      const source = tr.dataset.source;
-      const fare = allFares().find((f) => f.id === id && f.source === source);
-      if (!fare) return;
-      if (btn.dataset.act === "edit") {
-        state.editingId = id;
-        state.editingSource = source;
-        fillForm(fare);
-        openModal(source === "file" ? "编辑（将保存为本地覆盖）" : "编辑机票记录");
-      } else if (btn.dataset.act === "del") {
-        if (confirm("确定删除这条记录？")) deleteFare(id, source);
-      }
+      if (btn) handleFareAction(btn);
+    });
+    $("#fare-cards").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-act]");
+      if (btn) handleFareAction(btn);
     });
 
     $("#filter-country").addEventListener("change", (e) => {
       state.filter.country = e.target.value;
       renderTable();
     });
+    $("#filter-origin").addEventListener("change", (e) => {
+      state.filter.origin = e.target.value;
+      renderTable();
+    });
     $("#filter-deal").addEventListener("change", (e) => {
-      state.filter.dealOnly = e.target.checked;
+      state.filter.deal = e.target.value;
+      renderTable();
+    });
+    $("#filter-sort").addEventListener("change", (e) => applySortValue(e.target.value));
+    $("#filter-max-price").addEventListener("input", (e) => {
+      state.filter.maxPrice = e.target.value;
       renderTable();
     });
     $("#filter-q").addEventListener("input", (e) => {
       state.filter.q = e.target.value.trim();
       renderTable();
     });
+    $("#filter-examples").addEventListener("change", (e) => {
+      state.filter.showExamples = e.target.checked;
+      saveLocal();
+      renderTable();
+    });
+    $("#btn-reset-filters").addEventListener("click", resetFilters);
+
     $$("th[data-sort]").forEach((th) => {
       th.addEventListener("click", () => {
         const key = th.dataset.sort;
         if (state.sort.key === key) state.sort.dir = state.sort.dir === "asc" ? "desc" : "asc";
         else {
           state.sort.key = key;
-          state.sort.dir = key === "price_cny" || key === "found_at" || key === "depart_date" ? "asc" : "asc";
-          if (key === "found_at") state.sort.dir = "desc";
+          state.sort.dir = key === "found_at" ? "desc" : "asc";
         }
-        $$("th[data-sort] .sort").forEach((s) => (s.textContent = ""));
-        th.querySelector(".sort").textContent = state.sort.dir === "asc" ? "↑" : "↓";
+        saveLocal();
         renderTable();
       });
+    });
+
+    $("#prefs-toggle").addEventListener("click", () => {
+      state.prefsCollapsed = !state.prefsCollapsed;
+      saveLocal();
+      renderPrefs();
     });
 
     $("#btn-export").addEventListener("click", exportJson);
@@ -773,9 +1067,6 @@
     bind();
     renderPrefs();
     renderTable();
-    // mark default sort indicator
-    const th = $(`th[data-sort="${state.sort.key}"] .sort`);
-    if (th) th.textContent = state.sort.dir === "asc" ? "↑" : "↓";
   }
 
   init();

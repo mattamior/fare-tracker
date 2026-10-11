@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0ea5e9" />
   <title>机票盯价 · Fare Tracker</title>
   <link rel="stylesheet" href="./assets/app.css" />
 </head>
@@ -15,55 +16,100 @@
       </div>
       <div class="top-actions">
         <button type="button" class="btn" id="btn-settings">门槛设置</button>
-        <button type="button" class="btn" id="btn-export">导出 JSON</button>
-        <button type="button" class="btn" id="btn-import">导入 JSON</button>
+        <button type="button" class="btn" id="btn-export">导出</button>
+        <button type="button" class="btn" id="btn-import">导入</button>
         <input type="file" id="import-file" accept="application/json,.json" hidden />
-        <button type="button" class="btn btn-primary" id="btn-add">＋ 新增记录</button>
+        <button type="button" class="btn btn-primary" id="btn-add">＋ 新增</button>
       </div>
     </header>
 
     <section class="prefs" aria-label="盯价偏好">
-      <h2>盯价偏好</h2>
-      <ul id="prefs-list"></ul>
-      <div class="bars" id="bars"></div>
+      <button type="button" class="prefs-toggle" id="prefs-toggle" aria-expanded="true">
+        <h2>盯价偏好与门槛</h2>
+        <span class="prefs-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="prefs-body" id="prefs-body">
+        <ul id="prefs-list"></ul>
+        <div class="bars" id="bars"></div>
+        <p class="data-note muted">
+          主数据来自 <code>data/fares.json</code>；浏览器增删改保存在本机 localStorage，与文件记录合并显示。
+          「清空本地改动」只清浏览器侧，不影响仓库文件。
+        </p>
+      </div>
     </section>
 
+    <div class="stats" id="stats-row">
+      <div class="stat"><div class="k">真实记录</div><div class="v" id="stat-real">0</div></div>
+      <div class="stat deal"><div class="k">触及好价</div><div class="v" id="stat-deals">0</div></div>
+      <div class="stat"><div class="k">当前最低</div><div class="v" id="stat-min">—</div></div>
+      <div class="stat"><div class="k">筛选结果</div><div class="v" id="stat-filtered">0</div></div>
+    </div>
+
     <div class="layout">
-      <section class="card">
+      <section class="card list-card">
         <div class="card-head">
           <h2>票价列表</h2>
-          <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-local" title="清空浏览器本地增改">清空本地改动</button>
+          <div class="card-head-actions">
+            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-filters">清空筛选</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-local" title="清空浏览器本地增改">清空本地</button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="stats">
-            <div class="stat"><div class="k">全部记录</div><div class="v" id="stat-total">0</div></div>
-            <div class="stat deal"><div class="k">触及好价</div><div class="v" id="stat-deals">0</div></div>
-            <div class="stat"><div class="k">当前筛选最低</div><div class="v" id="stat-min">—</div></div>
-          </div>
-
-          <div class="filters">
+          <div class="filters" id="filters">
             <label class="field">国家
               <select id="filter-country"><option value="">全部国家</option></select>
             </label>
+            <label class="field">出发机场
+              <select id="filter-origin"><option value="">全部机场</option>
+                <option value="CAN">CAN 广州</option>
+                <option value="SZX">SZX 深圳</option>
+                <option value="ZUH">ZUH 珠海</option>
+                <option value="HKG">HKG 香港</option>
+              </select>
+            </label>
+            <label class="field">好价
+              <select id="filter-deal">
+                <option value="all">全部</option>
+                <option value="deal">只看好价</option>
+                <option value="normal">只看普通</option>
+              </select>
+            </label>
+            <label class="field">排序
+              <select id="filter-sort">
+                <option value="found_at:desc">发现时间 ↓</option>
+                <option value="found_at:asc">发现时间 ↑</option>
+                <option value="price_cny:asc">价格从低到高</option>
+                <option value="price_cny:desc">价格从高到低</option>
+                <option value="depart_date:asc">出发日期 ↑</option>
+                <option value="depart_date:desc">出发日期 ↓</option>
+                <option value="destination_country:asc">国家 A→Z</option>
+              </select>
+            </label>
+            <label class="field">最高价 ≤
+              <input id="filter-max-price" type="number" min="0" step="10" placeholder="不限" />
+            </label>
             <label class="field">搜索
-              <input id="filter-q" type="search" placeholder="航司 / 城市 / 备注…" />
+              <input id="filter-q" type="search" placeholder="航司 / 城市 / 备注…" enterkeyhint="search" />
             </label>
-            <label class="field">排序提示
-              <input type="text" value="点表头排序" disabled />
-            </label>
-            <label class="field">筛选
-              <span class="check-row"><input type="checkbox" id="filter-deal" /> 只看好价</span>
+            <label class="field check-field">示例数据
+              <span class="check-row">
+                <input type="checkbox" id="filter-examples" />
+                <span>显示示例</span>
+              </span>
             </label>
           </div>
 
-          <div class="table-wrap">
+          <div class="active-filters" id="active-filters" hidden></div>
+
+          <!-- Desktop table -->
+          <div class="table-wrap desktop-only">
             <table>
               <thead>
                 <tr>
                   <th data-sort="destination_country">航线 <span class="sort"></span></th>
                   <th data-sort="depart_date">日期 <span class="sort"></span></th>
                   <th data-sort="airline">航司 / 经停 <span class="sort"></span></th>
-                  <th data-sort="price_cny">价格 <span class="sort"></span></th>
+                  <th data-sort="price_cny">价格对比 <span class="sort"></span></th>
                   <th data-sort="found_at">发现时间 <span class="sort"></span></th>
                   <th>备注</th>
                   <th>操作</th>
@@ -72,30 +118,34 @@
               <tbody id="fare-tbody"></tbody>
             </table>
           </div>
+
+          <!-- Mobile cards -->
+          <div class="fare-cards mobile-only" id="fare-cards"></div>
         </div>
       </section>
 
-      <aside class="card">
+      <aside class="card side-card">
         <div class="card-head"><h2>价格趋势</h2></div>
         <div class="card-body">
-          <p class="muted" style="margin:0 0 10px">按发现时间，分国家折线（当前筛选结果）</p>
+          <p class="muted chart-hint">按发现时间，分国家折线（当前筛选结果）</p>
           <div class="chart-box">
             <svg id="chart-svg" viewBox="0 0 600 220" role="img" aria-label="价格趋势图"></svg>
           </div>
           <div class="chart-legend" id="chart-legend"></div>
-          <p class="muted" style="margin:14px 0 0">
-            数据来源：<code>data/fares.json</code>（文件）+ 浏览器 localStorage（本地增改）合并显示。
-            行程管家可用 <code>scripts/add-fare.mjs</code> 追加写入文件。
-          </p>
+
+          <div class="compare-panel" id="compare-panel">
+            <h3>好价对比速览</h3>
+            <div id="compare-body" class="compare-body"></div>
+          </div>
         </div>
       </aside>
     </div>
 
-    <p class="footer-note">机票盯价 · 本地运行 · 无外网依赖</p>
+    <p class="footer-note">机票盯价 · 静态站 · 无外网依赖 · 数据以 data/fares.json 为准</p>
   </div>
 
   <!-- 新增/编辑 -->
-  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal">
       <div class="modal-head">
         <h3 id="modal-title">新增机票记录</h3>
@@ -165,7 +215,7 @@
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">保存</button>
-            <button type="button" class="btn" id="btn-close-modal-2" onclick="document.getElementById('btn-close-modal').click()">取消</button>
+            <button type="button" class="btn" id="btn-close-modal-2">取消</button>
           </div>
         </form>
       </div>
