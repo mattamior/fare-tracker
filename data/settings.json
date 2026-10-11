@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "deal_bars": {
+    "泰国": 500,
+    "马来西亚": 400,
+    "印尼": 1000,
+    "越南": 600
+  },
+  "deal_bars_note": {
+    "越南": "默认 600，可在设置里改"
+  },
+  "preferences": {
+    "origins": ["CAN", "SZX", "ZUH", "HKG"],
+    "origin_label": "珠三角+香港（广州/深圳/珠海/香港）",
+    "priority_countries": ["印尼", "马来西亚", "泰国", "越南"],
+    "schedule_note": "优先能拼「周末+请一两天假」的短假窗口",
+    "spring_festival_note": "春节前再专门安排/扫一轮更好",
+    "trip_types": ["单程", "往返"],
+    "watch_window": "半年内，越便宜越好"
+  },
+  "origins_map": {
+    "CAN": "广州",
+    "SZX": "深圳",
+    "ZUH": "珠海",
+    "HKG": "香港"
+  }
+}
