@@ -5,6 +5,7 @@
   const SETTINGS_KEY = "fare-tracker:settings";
   const HIDDEN_FILE_KEY = "fare-tracker:hidden-file-ids";
   const UI_KEY = "fare-tracker:ui";
+  const THEME_KEY = "fare-tracker:theme";
 
   const DEFAULT_SETTINGS = {
     version: 1,
@@ -615,11 +616,63 @@
       .join("");
   }
 
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+
+  function chartInk() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--chart-label").trim() || "#94a3b8";
+  }
+
+  function chartGrid() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--chart-grid").trim() || "#e2e8f0";
+  }
+
+  function applyTheme(theme, { persist = true } = {}) {
+    const t = theme === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    document.documentElement.style.colorScheme = t;
+    const meta = document.getElementById("meta-theme-color");
+    if (meta) meta.setAttribute("content", t === "dark" ? "#0b1220" : "#0ea5e9");
+    const btn = document.getElementById("btn-theme");
+    if (btn) {
+      btn.setAttribute("aria-label", t === "dark" ? "切换到亮色模式" : "切换到暗色模式");
+      btn.setAttribute("title", t === "dark" ? "切换到亮色模式" : "切换到暗色模式");
+    }
+    if (persist) {
+      try {
+        localStorage.setItem(THEME_KEY, t);
+      } catch (_) {}
+    }
+  }
+
+  function resolveInitialTheme() {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "light" || saved === "dark") return saved;
+    } catch (_) {}
+    try {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    } catch (_) {
+      return "light";
+    }
+  }
+
+  function toggleTheme() {
+    applyTheme(currentTheme() === "dark" ? "light" : "dark");
+    // re-render chart so SVG strokes pick up new ink/grid colors
+    try {
+      renderTable();
+    } catch (_) {}
+  }
+
   function renderChart(list) {
     const svg = $("#chart-svg");
     const legend = $("#chart-legend");
     if (!list.length) {
-      svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="14">暂无数据可绘制趋势</text>`;
+      const label = chartInk();
+      svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="${label}" font-size="14">暂无数据可绘制趋势</text>`;
       legend.innerHTML = "";
       return;
     }
@@ -654,7 +707,7 @@
       .map((r) => {
         const y = pad.t + r * (H - pad.t - pad.b);
         const val = Math.round(yMax - r * (yMax - yMin));
-        return `<line x1="${pad.l}" y1="${y}" x2="${W - pad.r}" y2="${y}" stroke="#e2e8f0"/><text x="${pad.l - 6}" y="${y + 4}" text-anchor="end" fill="#94a3b8" font-size="11">${val}</text>`;
+        return `<line x1="${pad.l}" y1="${y}" x2="${W - pad.r}" y2="${y}" stroke="${chartGrid()}"/><text x="${pad.l - 6}" y="${y + 4}" text-anchor="end" fill="${chartInk()}" font-size="11">${val}</text>`;
       })
       .join("");
 
@@ -691,7 +744,7 @@
       .map((t) => {
         const d = new Date(t);
         const label = `${d.getMonth() + 1}/${d.getDate()}`;
-        return `<text x="${xScale(t)}" y="${H - 10}" text-anchor="middle" fill="#94a3b8" font-size="11">${label}</text>`;
+        return `<text x="${xScale(t)}" y="${H - 10}" text-anchor="middle" fill="${chartInk()}" font-size="11">${label}</text>`;
       })
       .join("");
 
@@ -938,6 +991,23 @@
   }
 
   function bind() {
+    // Trust early head script; only sync meta/aria (avoid flash overwrite)
+    applyTheme(
+      document.documentElement.getAttribute("data-theme") || resolveInitialTheme(),
+      { persist: false }
+    );
+
+    $("#btn-theme").addEventListener("click", toggleTheme);
+    try {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        let saved = null;
+        try { saved = localStorage.getItem(THEME_KEY); } catch (_) {}
+        if (saved === "light" || saved === "dark") return;
+        applyTheme(e.matches ? "dark" : "light", { persist: false });
+        try { renderTable(); } catch (_) {}
+      });
+    } catch (_) {}
+
     $("#btn-add").addEventListener("click", () => {
       state.editingId = null;
       state.editingSource = "local";

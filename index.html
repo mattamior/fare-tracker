@@ -3,7 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="theme-color" content="#0ea5e9" id="meta-theme-color" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("fare-tracker:theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+        document.documentElement.style.colorScheme = t;
+      } catch (e) {}
+    })();
+  </script>
   <title>机票盯价 · Fare Tracker</title>
   <link rel="stylesheet" href="./assets/app.css" />
 </head>
@@ -15,6 +27,12 @@
         <p>珠三角 / 香港出发 · 东南亚好价记录板</p>
       </div>
       <div class="top-actions">
+        <button type="button" class="btn btn-theme" id="btn-theme" aria-label="切换明暗模式" title="切换明暗模式">
+          <span class="theme-when-light" aria-hidden="true">🌙</span>
+          <span class="theme-when-dark" aria-hidden="true">☀️</span>
+          <span class="theme-label theme-when-light">暗色</span>
+          <span class="theme-label theme-when-dark">亮色</span>
+        </button>
         <button type="button" class="btn" id="btn-settings">门槛设置</button>
         <button type="button" class="btn" id="btn-export">导出</button>
         <button type="button" class="btn" id="btn-import">导入</button>
