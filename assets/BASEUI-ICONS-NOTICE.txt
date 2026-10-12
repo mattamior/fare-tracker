@@ -1,0 +1,6 @@
+baseui 18.2.0
+Icons adapted from Uber Base Web (baseui) v18.2.0
+https://github.com/uber/baseweb
+License: MIT (Copyright (c) Uber Technologies, Inc.)
+See BASEUI-ICON-LICENSE.txt
+Note: hide.svg / show.svg include CC BY attribution to Steven Schoger as noted in upstream SVG files.

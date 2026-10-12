@@ -198,6 +198,9 @@ code {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 11px;
@@ -234,10 +237,14 @@ html[data-theme="dark"] .btn-primary {
   gap: 6px;
   min-height: 40px;
 }
-.theme-when-dark { display: none; }
-html[data-theme="dark"] .theme-when-light { display: none; }
-html[data-theme="dark"] .theme-when-dark { display: inline; }
+.theme-when-dark { display: none !important; }
+html[data-theme="dark"] .theme-when-light { display: none !important; }
+html[data-theme="dark"] .theme-when-dark { display: inline-flex !important; }
+.theme-when-light { display: inline-flex; align-items: center; }
+html[data-theme="dark"] .theme-when-dark.btn-ico-label,
+.theme-when-light.btn-ico-label { align-items: center; }
 .btn-theme .theme-label { font-weight: 600; }
+.btn .icon, .btn-ico-label .icon { flex-shrink: 0; }
 @media (max-width: 760px) {
   .btn-theme { min-height: var(--touch); padding: 10px 12px; }
 }
@@ -551,8 +558,7 @@ tr.example-row:hover { opacity: 1; }
 }
 
 .muted { color: var(--muted); font-size: 0.82rem; }
-.row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-.row-actions .btn { min-height: 36px; }
+/* row-actions layout defined in Actions section below */
 .empty {
   text-align: center;
   padding: 36px 16px;
@@ -560,18 +566,25 @@ tr.example-row:hover { opacity: 1; }
 }
 .empty strong { display: block; color: var(--text); margin-bottom: 6px; font-size: 1rem; }
 
-/* —— Mobile cards —— */
-.desktop-only { display: block; }
-.mobile-only { display: none; }
+/* —— Desktop table vs mobile cards (strict breakpoint) —— */
+.desktop-only { display: none !important; }
+.mobile-only { display: none !important; }
+@media (min-width: 761px) {
+  .desktop-only { display: block !important; }
+  .mobile-only { display: none !important; }
+  .fare-cards { display: none !important; }
+  .table-wrap.desktop-only { display: block !important; }
+}
 @media (max-width: 760px) {
   .desktop-only { display: none !important; }
+  .table-wrap.desktop-only { display: none !important; }
   .mobile-only { display: block !important; }
+  .fare-cards.mobile-only { display: flex !important; }
   .top-actions .btn { min-height: var(--touch); padding: 10px 12px; }
   .brand h1 { font-size: 1.35rem; }
 }
 
 .fare-cards {
-  display: flex;
   flex-direction: column;
   gap: 10px;
 }
@@ -626,16 +639,7 @@ tr.example-row:hover { opacity: 1; }
 }
 .fare-card-compare .save { color: var(--deal); font-weight: 700; }
 .fare-card-compare .over { color: var(--warn); font-weight: 700; }
-.fare-card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-.fare-card-actions .btn {
-  flex: 1;
-  min-height: var(--touch);
-  justify-content: center;
-}
+/* fare-card-actions layout defined in Actions section below */
 
 /* —— Chart & compare —— */
 .chart-hint { margin: 0 0 10px; }
@@ -869,8 +873,6 @@ tr.example-row:hover { opacity: 1; }
   gap: 6px;
   margin-bottom: 6px;
 }
-.row-actions .book-links { margin-bottom: 6px; width: 100%; }
-.fare-card-actions .book-links { width: 100%; margin-bottom: 2px; }
 .btn-book {
   background: var(--primary);
   border-color: var(--primary);
@@ -928,3 +930,246 @@ tr.example-row:hover { opacity: 1; }
   align-items: center;
   padding: 16px 12px;
 }
+
+
+/* —— Uber Base icons —— */
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  display: inline-block;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  color: inherit;
+  flex-shrink: 0;
+}
+.btn > .icon + span,
+.btn > span { line-height: 1; }
+.prefs-chevron .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.15s ease;
+}
+.prefs:not(.collapsed) .prefs-chevron .icon {
+  transform: rotate(180deg);
+}
+.footer-attr { margin-top: 4px; font-size: 0.72rem; }
+.footer-attr a { color: var(--primary); }
+
+/* —— Per-row price trend (full width under main info) —— */
+tr.fare-main td { border-bottom-color: transparent; }
+tr.fare-trend-row td {
+  padding-top: 0;
+  padding-bottom: 10px;
+  border-bottom: none;
+}
+tr.fare-return-row td {
+  padding-top: 0;
+  padding-bottom: 14px;
+}
+tr.fare-group-end td {
+  border-bottom: 1px solid var(--border);
+}
+tr.deal-row.fare-trend-row,
+tr.deal-row.fare-return-row {
+  background: var(--deal-row-bg);
+}
+.fare-trend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--fare-card-compare-bg);
+  border: 1px solid var(--border);
+  width: 100%;
+  box-sizing: border-box;
+}
+.fare-trend-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.fare-trend .price-meta { margin-top: 0; }
+.fare-trend .price-bar {
+  margin-top: 0;
+  max-width: none;
+  flex: 1 1 160px;
+  min-width: 120px;
+  height: 8px;
+}
+.fare-trend .hist-hint { margin-top: 0; }
+
+/* —— Recommended return (one-way only) —— */
+.return-rec {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.return-rec > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  user-select: none;
+}
+.return-rec > summary::-webkit-details-marker { display: none; }
+.return-rec > summary .icon-chevron {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.15s ease;
+  color: var(--muted);
+}
+.return-rec[open] > summary .icon-chevron {
+  transform: rotate(90deg);
+}
+.return-rec-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.return-rec-body {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.return-rec-empty {
+  font-size: 0.82rem;
+  color: var(--muted);
+  padding: 4px 0 2px;
+}
+.return-rec-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.return-rec-item .rr-days {
+  font-weight: 700;
+  color: var(--primary-dark);
+  min-width: 3.2rem;
+}
+html[data-theme="dark"] .return-rec-item .rr-days { color: var(--primary); }
+.return-rec-item .rr-date { font-variant-numeric: tabular-nums; }
+.return-rec-item .rr-price {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+.return-rec-item .rr-meta { color: var(--muted); font-size: 0.78rem; }
+.return-rec-item .book-links { margin: 0; }
+
+/* Mobile card extras */
+.fare-card .fare-trend { margin-top: 8px; }
+.fare-card .return-rec { margin-top: 8px; }
+.price-cell .price-meta,
+.price-cell .price-bar,
+.price-cell .hist-hint { display: none; }
+
+
+/* —— Actions: desktop book + mobile more menu —— */
+.row-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 148px;
+}
+.row-actions .book-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 0;
+}
+.row-actions .btn-book {
+  width: 100%;
+  justify-content: center;
+  font-weight: 700;
+  min-height: 36px;
+}
+.row-actions .btn[data-act],
+.row-actions .btn-danger {
+  width: 100%;
+  justify-content: center;
+}
+.action-no-book { font-size: 0.78rem; }
+
+.fare-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.fare-card-actions-main {
+  flex: 1;
+  min-width: 0;
+}
+.fare-card-actions-main .btn-book-primary {
+  width: 100%;
+  justify-content: center;
+  min-height: var(--touch);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.more-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+.more-menu > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.more-menu > summary::-webkit-details-marker { display: none; }
+.more-menu-toggle {
+  min-height: var(--touch);
+  color: var(--muted);
+}
+.more-menu-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  min-width: 160px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 20;
+}
+.more-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: var(--touch);
+}
+.more-menu-item:hover { background: var(--btn-hover-bg); }
+.more-menu-danger { color: var(--danger); }

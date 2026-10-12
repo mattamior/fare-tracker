@@ -142,3 +142,16 @@ fare-tracker/
 - 页面增删改默认写在浏览器 localStorage，**不会**自动改 `data/fares.json`（静态站无写权限）。要用文件持久化请走 CLI / 手改 JSON，并 push 才能更新 Pages。
 - 「清空本地改动」只清浏览器侧，不影响 `data/fares.json`。
 - 预置带「示例」标记的数据，页面默认隐藏；勾选「显示示例」才可见。真实票价请覆盖或追加。
+
+## 图标与许可
+
+页面图标改编自 [Uber Base Web](https://github.com/uber/baseweb)（npm：`baseui` v18.2.0）公开 Icon 资源，**MIT License**（Copyright (c) Uber Technologies, Inc.）。
+
+- 许可全文：[`assets/BASEUI-ICON-LICENSE.txt`](./assets/BASEUI-ICON-LICENSE.txt)
+- 简要说明：[`assets/BASEUI-ICONS-NOTICE.txt`](./assets/BASEUI-ICONS-NOTICE.txt)
+- Sprite：[`assets/uber-icons.svg`](./assets/uber-icons.svg)
+
+其中 `hide` / `show` 图标上游标注源自 Steven Schoger 的 view-hide / view-show（CC BY 4.0），已随 Base Web 源文件保留署名信息。
+
+功能补充：票价主信息下方单独一行「价格趋势」；单程票可展开「推荐返程」（约 +4 / +7 / +10 天，匹配同航线往返记录与备注）。宽屏（≥761px）强制表格，窄屏（≤760px）才使用卡片布局。
+

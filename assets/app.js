@@ -410,15 +410,57 @@
     return { urls, text: cleaned };
   }
 
-  function noteLinksHtml(notes) {
+  function noteLinksHtml(notes, { compact = false } = {}) {
     const { urls } = extractNoteLinks(notes);
     if (!urls.length) return "";
     return `<div class="book-links">${urls
       .map((u, i) => {
-        const label = urls.length === 1 ? "查票 / 下单" : `查票链接 ${i + 1}`;
-        return `<a class="btn btn-sm btn-book" href="${escapeAttr(u)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+        const label =
+          urls.length === 1
+            ? "查票 / 下单"
+            : compact
+              ? `链接 ${i + 1}`
+              : `查票链接 ${i + 1}`;
+        return `<a class="btn btn-sm btn-book" href="${escapeAttr(u)}" target="_blank" rel="noopener noreferrer">${iconSvg("arrow-right")}<span>${label}</span></a>`;
       })
       .join("")}</div>`;
+  }
+
+  function desktopActionsHtml(notes) {
+    const books = noteLinksHtml(notes);
+    return `<div class="row-actions">
+      ${books || `<span class="muted action-no-book">暂无查票链接</span>`}
+      <button class="btn btn-sm" data-act="edit">${iconSvg("overflow")}<span>编辑</span></button>
+      <button class="btn btn-sm btn-danger" data-act="del">${iconSvg("delete")}<span>删除</span></button>
+    </div>`;
+  }
+
+  function mobileActionsHtml(notes) {
+    const { urls } = extractNoteLinks(notes);
+    const primary = urls.length
+      ? `<a class="btn btn-book btn-book-primary" href="${escapeAttr(urls[0])}" target="_blank" rel="noopener noreferrer">${iconSvg("arrow-right")}<span>查票 / 下单</span></a>`
+      : `<span class="muted action-no-book">暂无查票链接</span>`;
+    const extraLinks =
+      urls.length > 1
+        ? urls
+            .slice(1)
+            .map(
+              (u, i) =>
+                `<a class="more-menu-item" href="${escapeAttr(u)}" target="_blank" rel="noopener noreferrer">${iconSvg("arrow-right")}<span>查票链接 ${i + 2}</span></a>`
+            )
+            .join("")
+        : "";
+    return `<div class="fare-card-actions">
+      <div class="fare-card-actions-main">${primary}</div>
+      <details class="more-menu">
+        <summary class="btn btn-sm btn-ghost more-menu-toggle" aria-label="更多操作">${iconSvg("overflow")}<span>更多</span></summary>
+        <div class="more-menu-panel" role="menu">
+          ${extraLinks}
+          <button type="button" class="more-menu-item" data-act="edit">${iconSvg("overflow")}<span>编辑</span></button>
+          <button type="button" class="more-menu-item more-menu-danger" data-act="del">${iconSvg("delete")}<span>删除</span></button>
+        </div>
+      </details>
+    </div>`;
   }
 
   function notesDisplayHtml(notes, { clamp = true } = {}) {
@@ -513,6 +555,170 @@
     }
   }
 
+
+  function iconSvg(name, cls) {
+    const c = cls ? ` ${cls}` : "";
+    return `<svg class="icon${c}" aria-hidden="true" focusable="false"><use href="#uber-${name}"></use></svg>`;
+  }
+
+  function originsOverlap(a, b) {
+    const A = new Set(normalizeOrigin(a));
+    const B = normalizeOrigin(b);
+    return B.some((x) => A.has(x));
+  }
+
+  function addDaysYmd(ymd, days) {
+    if (!ymd) return "";
+    const d = new Date(`${String(ymd).slice(0, 10)}T12:00:00`);
+    if (Number.isNaN(d.getTime())) return "";
+    d.setDate(d.getDate() + days);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function airportCompatible(a, b) {
+    const aa = (a || "").toUpperCase();
+    const bb = (b || "").toUpperCase();
+    if (!aa || !bb) return true;
+    return aa === bb;
+  }
+
+  /** 单程：推荐约 +4/+7/+10 天返程（同航线往返记录、notes 解析） */
+  function findReturnRecs(fare) {
+    if (!fare || fare.trip_type !== "单程") return [];
+    const dep = String(fare.depart_date || "").slice(0, 10);
+    if (!dep) return [];
+    const offsets = [4, 7, 10];
+    const targets = offsets.map((days) => ({ days, date: addDaysYmd(dep, days) }));
+    const pool = allFares().filter((f) => !f.is_example);
+    const out = [];
+    const seen = new Set();
+
+    function pushItem(item) {
+      const key = `${item.days}|${item.date}|${item.price ?? ""}|${item.airline || ""}|${(item.urls || [])[0] || ""}|${item.sourceId || ""}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push(item);
+    }
+
+    for (const { days, date } of targets) {
+      if (!date) continue;
+      for (const f of pool) {
+        if (f.trip_type !== "往返") continue;
+        if (f.destination_country !== fare.destination_country) continue;
+        if (!originsOverlap(f.origin, fare.origin)) continue;
+        if (!airportCompatible(f.destination_airport, fare.destination_airport)) continue;
+        const fDep = String(f.depart_date || "").slice(0, 10);
+        const fRet = String(f.return_date || "").slice(0, 10);
+        if (fDep === dep && fRet === date) {
+          const links = extractNoteLinks(f.notes);
+          pushItem({
+            days,
+            date,
+            price: f.price_cny,
+            airline: f.airline,
+            stops: f.stops,
+            urls: links.urls,
+            note: links.text,
+            kind: "往返记录",
+            sourceId: `${f.source}-${f.id}`,
+          });
+        }
+      }
+    }
+
+    // notes on the one-way itself: e.g. 往返12/4-12/11约970
+    const note = fare.notes || "";
+    const noteMatch = note.match(/往返\s*(\d{1,2})\/(\d{1,2})\s*[-~～到至]+\s*(\d{1,2})\/(\d{1,2})[^0-9]{0,6}约?\s*(\d{3,5})?/);
+    if (noteMatch) {
+      const y = Number(dep.slice(0, 4));
+      const ret = `${y}-${String(noteMatch[3]).padStart(2, "0")}-${String(noteMatch[4]).padStart(2, "0")}`;
+      for (const { days, date } of targets) {
+        if (date === ret) {
+          const links = extractNoteLinks(note);
+          pushItem({
+            days,
+            date,
+            price: noteMatch[5] ? Number(noteMatch[5]) : null,
+            airline: "",
+            stops: "",
+            urls: links.urls,
+            note: "来自本条备注",
+            kind: "备注",
+            sourceId: `note-${fare.source}-${fare.id}-${days}`,
+          });
+        }
+      }
+    }
+
+    // RT notes mentioning +N days paired with this depart
+    for (const { days, date } of targets) {
+      for (const f of pool) {
+        if (f.trip_type !== "往返") continue;
+        if (f.destination_country !== fare.destination_country) continue;
+        if (!originsOverlap(f.origin, fare.origin)) continue;
+        const fDep = String(f.depart_date || "").slice(0, 10);
+        const fRet = String(f.return_date || "").slice(0, 10);
+        if (fDep !== dep) continue;
+        if (fRet !== date) continue;
+        // already added above
+      }
+    }
+
+    out.sort((a, b) => a.days - b.days || (a.price || 0) - (b.price || 0));
+    return out;
+  }
+
+  function returnRecHtml(fare) {
+    if (fare.trip_type !== "单程") return "";
+    const recs = findReturnRecs(fare);
+    const countLabel = recs.length ? `${recs.length} 条` : "暂无";
+    let body;
+    if (!recs.length) {
+      body = `<div class="return-rec-empty">暂无推荐返程</div>`;
+    } else {
+      body = recs
+        .map((r) => {
+          const price =
+            r.price != null && !Number.isNaN(Number(r.price))
+              ? `¥${Number(r.price).toLocaleString("zh-CN")}`
+              : "价格待查";
+          const meta = [r.kind, r.airline, r.stops, r.note].filter(Boolean).join(" · ");
+          const links = (r.urls || []).length
+            ? `<div class="book-links">${r.urls
+                .slice(0, 2)
+                .map((u, i) => {
+                  const label = i === 0 ? "查票 / 下单" : "链接";
+                  return `<a class="btn btn-sm btn-book" href="${escapeAttr(u)}" target="_blank" rel="noopener noreferrer">${iconSvg("arrow-right")}${label}</a>`;
+                })
+                .join("")}</div>`
+            : "";
+          return `<div class="return-rec-item">
+            <span class="rr-days">+${r.days}天</span>
+            <span class="rr-date">${escapeHtml(r.date)}</span>
+            <span class="rr-price">${price}</span>
+            ${meta ? `<span class="rr-meta">${escapeHtml(meta)}</span>` : ""}
+            ${links}
+          </div>`;
+        })
+        .join("");
+    }
+    return `<details class="return-rec">
+      <summary>${iconSvg("chevron-right", "icon-chevron")}<span>推荐返程</span><span class="return-rec-count">${countLabel} · +4 / +7 / +10</span></summary>
+      <div class="return-rec-body">${body}</div>
+    </details>`;
+  }
+
+  function trendRowHtml(fare, cmp) {
+    const inner = priceCompareHtml(fare, cmp);
+    if (!inner) {
+      return `<div class="fare-trend"><span class="fare-trend-label">价格趋势</span><span class="muted">暂无对比数据</span></div>`;
+    }
+    return `<div class="fare-trend"><span class="fare-trend-label">价格趋势</span>${inner}</div>`;
+  }
+
   function priceCompareHtml(fare, cmp) {
     const parts = [];
     if (cmp.vsBar) {
@@ -593,7 +799,9 @@
         ]
           .filter(Boolean)
           .join(" ");
-        return `<tr class="${rowClass}" data-id="${f.id}" data-source="${f.source}">
+        const trend = trendRowHtml(f, cmp);
+        const ret = returnRecHtml(f);
+        return `<tr class="fare-main ${rowClass}" data-id="${f.id}" data-source="${f.source}">
           <td>
             <div class="route-main">${escapeHtml(originLabel(f.origin))} → ${escapeHtml(f.destination_country)}</div>
             <div class="route-sub">${escapeHtml(dest || "—")} · ${escapeHtml(f.trip_type)}</div>
@@ -603,18 +811,23 @@
           <td>${escapeHtml(f.airline || "—")}<div class="muted">${escapeHtml(f.stops || "—")}</div></td>
           <td class="price-cell">
             <div class="price ${f.meets_deal_bar ? "deal" : ""}">¥${Number(f.price_cny).toLocaleString("zh-CN")}</div>
-            ${priceCompareHtml(f, cmp)}
           </td>
           <td class="muted">${escapeHtml(formatFoundAt(f.found_at))}</td>
           <td class="muted">${notesDisplayHtml(f.notes)}</td>
           <td>
-            <div class="row-actions">
-              ${noteLinksHtml(f.notes)}
-              <button class="btn btn-sm" data-act="edit">编辑</button>
-              <button class="btn btn-sm btn-danger" data-act="del">删除</button>
-            </div>
+            ${desktopActionsHtml(f.notes)}
           </td>
-        </tr>`;
+        </tr>
+        <tr class="fare-trend-row ${rowClass} ${ret ? "" : "fare-group-end"}" data-id="${f.id}" data-source="${f.source}">
+          <td colspan="7">${trend}</td>
+        </tr>
+        ${
+          ret
+            ? `<tr class="fare-return-row fare-group-end ${rowClass}" data-id="${f.id}" data-source="${f.source}">
+          <td colspan="7">${ret}</td>
+        </tr>`
+            : ""
+        }`;
       })
       .join("");
 
@@ -634,8 +847,11 @@
             : `门槛 ¥${bar} · <span class="over">超 ¥${Math.abs(diff)}</span>`;
         }
         if (cmp.routeMin != null) {
-          compareBits += (compareBits ? "<br>" : "") +
-            (f.meets_deal_bar && cmp.isRouteBest ? "同航线历史最低" : `同航线最低 ¥${cmp.routeMin}`);
+          compareBits +=
+            (compareBits ? "<br>" : "") +
+            (f.meets_deal_bar && cmp.isRouteBest
+              ? "同航线历史最低"
+              : `同航线最低 ¥${cmp.routeMin}`);
         }
         return `<article class="fare-card ${f.meets_deal_bar ? "deal" : ""} ${f.is_example ? "example" : ""}" data-id="${f.id}" data-source="${f.source}">
           <div class="fare-card-top">
@@ -649,20 +865,32 @@
             <div>${escapeHtml(dest || "—")} · ${escapeHtml(f.trip_type)} · ${escapeHtml(dates)}</div>
             <div>${escapeHtml(f.airline || "—")} · ${escapeHtml(f.stops || "—")}</div>
             <div>发现 ${escapeHtml(formatFoundAt(f.found_at))}</div>
-            ${(() => { const t = extractNoteLinks(f.notes).text; return t ? `<div class="notes-clamp" style="max-width:100%">${escapeHtml(t)}</div>` : ""; })()}
+            ${(() => {
+              const t = extractNoteLinks(f.notes).text;
+              return t ? `<div class="notes-clamp" style="max-width:100%">${escapeHtml(t)}</div>` : "";
+            })()}
           </div>
           ${compareBits ? `<div class="fare-card-compare">${compareBits}</div>` : ""}
-          <div class="fare-card-actions">
-            ${noteLinksHtml(f.notes)}
-            <button class="btn btn-sm" data-act="edit">编辑</button>
-            <button class="btn btn-sm btn-danger" data-act="del">删除</button>
-          </div>
+          ${trendRowHtml(f, cmp)}
+          ${returnRecHtml(f)}
+          ${mobileActionsHtml(f.notes)}
         </article>`;
       })
       .join("");
 
     renderChart(list);
     renderCompare(list.filter((f) => !f.is_example));
+    try {
+      if (/(?:^|[?&])expandReturn=1(?:&|$)/.test(location.search)) {
+        document.querySelectorAll("details.return-rec").forEach((d) => {
+          try {
+            if (d.getClientRects().length) d.open = true;
+          } catch (_) {
+            d.open = true;
+          }
+        });
+      }
+    } catch (_) {}
   }
 
   function renderCompare(list) {
@@ -1151,7 +1379,11 @@
     });
     $("#fare-cards").addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-act]");
-      if (btn) handleFareAction(btn);
+      if (btn) {
+        const menu = btn.closest("details.more-menu");
+        if (menu) menu.open = false;
+        handleFareAction(btn);
+      }
     });
 
     $("#filter-country").addEventListener("change", (e) => {
