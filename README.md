@@ -155,3 +155,8 @@ fare-tracker/
 
 功能补充：票价主信息下方单独一行「价格趋势」；单程票可展开「推荐返程」（约 +4 / +7 / +10 天，匹配同航线往返记录与备注）。宽屏（≥761px）强制表格，窄屏（≤760px）才使用卡片布局。
 
+## Agnir Project Instructions
+
+This section is a **backward-compatible locator only**. Canonical Agnir activation and Project-operation instructions live in [`AGNIR.md`](./AGNIR.md). Do not duplicate or fork that procedure here.
+
+Fresh activation path: `AGENTS.md` → `AGNIR.md` → `AGNIR.yaml` → declared `.agnir/` memory.

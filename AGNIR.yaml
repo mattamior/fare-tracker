@@ -1,0 +1,36 @@
+agnir:
+  version: "1.0"
+  discovery_profile: "repository-filesystem/1.0"
+
+project:
+  identity: "urn:agnir:project:mattamior/fare-tracker"
+  profiles:
+    - generic
+
+continuity:
+  lineage: "urn:agnir:lineage:authoritative"
+
+memory:
+  state: ".agnir/state.md"
+  next_actions: ".agnir/next-actions.md"
+  decisions: ".agnir/decisions.md"
+  evidence: ".agnir/evidence/"
+
+policy:
+  checkpoint: event-driven
+
+extensions:
+  agnir/repository:
+    canonical: "mattamior/fare-tracker"
+    authoritative_ref: "main"
+  agnir/vcs:
+    branch_continuity: "lineage-bound"
+    integration_reconciliation: "required"
+    lineage_binding:
+      kind: "vcs-ref"
+      selector: "refs/heads/main"
+  agnir/operations:
+    distribution: "agnir-agent-skill"
+    release: "1.0.2"
+    source: "iorLab/agnir"
+    applied_revision: "b5626394ec40a5cb7a28c01892acde07cc0adc8e"
