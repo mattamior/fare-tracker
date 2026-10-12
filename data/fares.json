@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-12T03:57:15+08:00",
-  "next_id": 15,
+  "updated_at": "2026-10-12T08:30:12+08:00",
+  "next_id": 27,
   "fares": [
     {
       "id": 1,
@@ -281,6 +281,246 @@
       "notes": "远高于马来400",
       "found_at": "2026-10-12T03:57:15+08:00",
       "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 15,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-10-14",
+      "return_date": "",
+      "airline": "春秋/亚航",
+      "stops": "直飞",
+      "price_cny": 353,
+      "notes": "早报扫票 10/14 附近约353-395",
+      "found_at": "2026-10-12T08:30:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 16,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-15",
+      "return_date": "",
+      "airline": "春秋航空",
+      "stops": "直飞",
+      "price_cny": 240,
+      "notes": "早报：约S5≈240；需下单前复核",
+      "found_at": "2026-10-12T08:30:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 17,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "DMK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-20",
+      "return_date": "",
+      "airline": "亚航等",
+      "stops": "直飞",
+      "price_cny": 458,
+      "notes": "早报深圳起约458",
+      "found_at": "2026-10-12T08:30:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 18,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-20",
+      "return_date": "",
+      "airline": "九元航空",
+      "stops": "直飞",
+      "price_cny": 575,
+      "notes": "早报明显低于1000门槛",
+      "found_at": "2026-10-12T08:30:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 19,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-11-03",
+      "return_date": "",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 540,
+      "notes": "早报约$81",
+      "found_at": "2026-10-12T08:30:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 20,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "巴厘岛",
+      "destination_airport": "DPS",
+      "trip_type": "单程",
+      "depart_date": "2026-11-01",
+      "return_date": "",
+      "airline": "—",
+      "stops": "经停",
+      "price_cny": 925,
+      "notes": "早报约925-985贴近门槛",
+      "found_at": "2026-10-12T08:30:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 21,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-10-14",
+      "return_date": "",
+      "airline": "春秋/亚航",
+      "stops": "直飞",
+      "price_cny": 353,
+      "notes": "早报扫票 10/14 附近约353-395",
+      "found_at": "2026-10-12T08:30:12+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 22,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-15",
+      "return_date": "",
+      "airline": "春秋航空",
+      "stops": "直飞",
+      "price_cny": 240,
+      "notes": "早报：约S5≈240；需下单前复核",
+      "found_at": "2026-10-12T08:30:12+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 23,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "DMK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-20",
+      "return_date": "",
+      "airline": "亚航等",
+      "stops": "直飞",
+      "price_cny": 458,
+      "notes": "早报深圳起约458",
+      "found_at": "2026-10-12T08:30:12+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 24,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-20",
+      "return_date": "",
+      "airline": "九元航空",
+      "stops": "直飞",
+      "price_cny": 575,
+      "notes": "早报明显低于1000门槛",
+      "found_at": "2026-10-12T08:30:12+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 25,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-11-03",
+      "return_date": "",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 540,
+      "notes": "早报约$81",
+      "found_at": "2026-10-12T08:30:12+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 26,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "巴厘岛",
+      "destination_airport": "DPS",
+      "trip_type": "单程",
+      "depart_date": "2026-11-01",
+      "return_date": "",
+      "airline": "—",
+      "stops": "经停",
+      "price_cny": 925,
+      "notes": "早报约925-985贴近门槛",
+      "found_at": "2026-10-12T08:30:12+08:00",
+      "meets_deal_bar": true,
       "deal_bar_override": null,
       "is_example": false
     }
