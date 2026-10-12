@@ -35,15 +35,15 @@
     filter: {
       country: "",
       origin: "",
-      deal: "all",
+      deal: "deal",
       q: "",
       maxPrice: "",
       showExamples: false,
     },
-    sort: { key: "found_at", dir: "desc" },
+    sort: { key: "price_cny", dir: "asc" },
     editingId: null,
     editingSource: null,
-    prefsCollapsed: false,
+    prefsCollapsed: true,
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -183,9 +183,11 @@
     localStorage.setItem(
       UI_KEY,
       JSON.stringify({
+        uxVersion: 2,
         showExamples: state.filter.showExamples,
         prefsCollapsed: state.prefsCollapsed,
         sort: state.sort,
+        deal: state.filter.deal,
       })
     );
   }
@@ -216,8 +218,18 @@
       const ui = JSON.parse(localStorage.getItem(UI_KEY) || "null");
       if (ui) {
         if (typeof ui.showExamples === "boolean") state.filter.showExamples = ui.showExamples;
-        if (typeof ui.prefsCollapsed === "boolean") state.prefsCollapsed = ui.prefsCollapsed;
-        if (ui.sort?.key) state.sort = ui.sort;
+        // uxVersion < 2: force recommended defaults (deal + price asc + prefs collapsed)
+        if (Number(ui.uxVersion || 0) >= 2) {
+          if (typeof ui.prefsCollapsed === "boolean") state.prefsCollapsed = ui.prefsCollapsed;
+          if (ui.sort?.key) state.sort = ui.sort;
+          if (ui.deal === "all" || ui.deal === "deal" || ui.deal === "normal") {
+            state.filter.deal = ui.deal;
+          }
+        } else {
+          state.prefsCollapsed = true;
+          state.sort = { key: "price_cny", dir: "asc" };
+          state.filter.deal = "deal";
+        }
       }
     } catch (_) {}
   }
@@ -294,6 +306,7 @@
     }
     const { key, dir } = state.sort;
     const mul = dir === "asc" ? 1 : -1;
+    list = dedupeFares(list);
     list.sort((a, b) => {
       let av = a[key];
       let bv = b[key];
@@ -342,6 +355,79 @@
   }
   function escapeAttr(s) {
     return escapeHtml(s).replace(/'/g, "&#39;");
+  }
+
+
+  function dedupeKey(fare) {
+    const origin = normalizeOrigin(fare.origin).slice().sort().join(",");
+    return [
+      origin,
+      fare.destination_country || "",
+      (fare.destination_airport || "").toUpperCase(),
+      fare.trip_type || "",
+      fare.depart_date || "",
+      fare.return_date || "",
+      Number(fare.price_cny),
+    ].join("|");
+  }
+
+  /** Same route + date + price → keep one (prefer non-example, newer found_at, file over local). */
+  function dedupeFares(list) {
+    const rank = (f) => {
+      const t = new Date(f.found_at || 0).getTime() || 0;
+      const examplePenalty = f.is_example ? 0 : 1e15;
+      const sourceBonus = f.source === "file" ? 1e12 : 0;
+      return examplePenalty + sourceBonus + t;
+    };
+    const best = new Map();
+    for (const f of list) {
+      const k = dedupeKey(f);
+      const prev = best.get(k);
+      if (!prev || rank(f) >= rank(prev)) best.set(k, f);
+    }
+    // preserve input order among winners
+    const winners = new Set(best.values());
+    return list.filter((f) => winners.has(f));
+  }
+
+  function extractNoteLinks(notes) {
+    const text = String(notes || "");
+    const re = /https?:\/\/[^\s<>"'\]]+/gi;
+    const urls = [];
+    const seen = new Set();
+    let m;
+    while ((m = re.exec(text))) {
+      let url = m[0].replace(/[),.;!?]+$/g, "");
+      if (seen.has(url)) continue;
+      seen.add(url);
+      urls.push(url);
+    }
+    const cleaned = text
+      .replace(re, " ")
+      .replace(/\s{2,}/g, " ")
+      .replace(/\s*[·|｜]\s*$/g, "")
+      .trim();
+    return { urls, text: cleaned };
+  }
+
+  function noteLinksHtml(notes) {
+    const { urls } = extractNoteLinks(notes);
+    if (!urls.length) return "";
+    return `<div class="book-links">${urls
+      .map((u, i) => {
+        const label = urls.length === 1 ? "查票 / 下单" : `查票链接 ${i + 1}`;
+        return `<a class="btn btn-sm btn-book" href="${escapeAttr(u)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+      })
+      .join("")}</div>`;
+  }
+
+  function notesDisplayHtml(notes, { clamp = true } = {}) {
+    const { text } = extractNoteLinks(notes);
+    if (!text) return clamp ? "—" : "";
+    if (clamp) {
+      return `<div class="notes-clamp" title="${escapeAttr(text)}">${escapeHtml(text)}</div>`;
+    }
+    return escapeHtml(text);
   }
 
   function renderPrefs() {
@@ -400,7 +486,7 @@
     const sortVal = `${state.sort.key}:${state.sort.dir}`;
     const sortSel = $("#filter-sort");
     if ([...sortSel.options].some((o) => o.value === sortVal)) sortSel.value = sortVal;
-    else sortSel.value = "found_at:desc";
+    else sortSel.value = "price_cny:asc";
 
     $$("th[data-sort]").forEach((th) => {
       const active = th.dataset.sort === state.sort.key;
@@ -441,16 +527,19 @@
       );
     }
     const histBits = [];
+    const allowBestLabel = fare.meets_deal_bar;
     if (cmp.routeMin != null) {
-      if (cmp.isRouteBest) histBits.push(`<span class="best">同航线历史最低</span>`);
+      if (allowBestLabel && cmp.isRouteBest) histBits.push(`<span class="best">同航线历史最低</span>`);
+      else if (cmp.isRouteBest) histBits.push(`同航线最低 ¥${cmp.routeMin}`);
       else histBits.push(`同航线最低 ¥${cmp.routeMin}`);
     }
     if (cmp.countryMin != null && !(cmp.isRouteBest && cmp.routeMin === cmp.countryMin)) {
-      if (cmp.isCountryBest) histBits.push(`<span class="best">同国家历史最低</span>`);
+      if (allowBestLabel && cmp.isCountryBest) histBits.push(`<span class="best">同国家历史最低</span>`);
       else histBits.push(`同国家最低 ¥${cmp.countryMin}`);
     }
     if (histBits.length) {
-      parts.push(`<div class="hist-hint ${cmp.isRouteBest || cmp.isCountryBest ? "best" : ""}">${histBits.join(" · ")}</div>`);
+      const showBest = fare.meets_deal_bar && (cmp.isRouteBest || cmp.isCountryBest);
+      parts.push(`<div class="hist-hint ${showBest ? "best" : ""}">${histBits.join(" · ")}</div>`);
     }
     return parts.join("");
   }
@@ -459,7 +548,10 @@
     const badges = [];
     if (fare.meets_deal_bar) badges.push(`<span class="badge badge-deal">好价</span>`);
     else badges.push(`<span class="badge badge-normal">普通</span>`);
-    if (cmp.isRouteBest || cmp.isCountryBest) badges.push(`<span class="badge badge-best">历史低</span>`);
+    // 历史低 only when within deal threshold (true good-price historical low)
+    if (fare.meets_deal_bar && (cmp.isRouteBest || cmp.isCountryBest)) {
+      badges.push(`<span class="badge badge-best">历史低</span>`);
+    }
     if (fare.is_example) badges.push(`<span class="badge badge-example">示例</span>`);
     if (fare.source === "local") badges.push(`<span class="badge badge-local">本地</span>`);
     return badges.join("");
@@ -478,7 +570,7 @@
     if (!list.length) {
       const hasAny = allFares().length > 0;
       const emptyMsg = hasAny
-        ? `<div class="empty"><strong>没有符合筛选的记录</strong>试试清空筛选，或打开「显示示例」。</div>`
+        ? `<div class="empty"><strong>没有符合筛选的记录</strong>点「重置筛选」或改成「全部」看看；也可打开「显示示例」。</div>`
         : `<div class="empty"><strong>暂无真实票价记录</strong>行程管家写入 data/fares.json 并推送后刷新即可；也可点「＋ 新增」。</div>`;
       tbody.innerHTML = `<tr><td colspan="7">${emptyMsg}</td></tr>`;
       cards.innerHTML = emptyMsg;
@@ -514,9 +606,10 @@
             ${priceCompareHtml(f, cmp)}
           </td>
           <td class="muted">${escapeHtml(formatFoundAt(f.found_at))}</td>
-          <td class="muted"><div class="notes-clamp" title="${escapeAttr(f.notes || "")}">${escapeHtml(f.notes || "—")}</div></td>
+          <td class="muted">${notesDisplayHtml(f.notes)}</td>
           <td>
             <div class="row-actions">
+              ${noteLinksHtml(f.notes)}
               <button class="btn btn-sm" data-act="edit">编辑</button>
               <button class="btn btn-sm btn-danger" data-act="del">删除</button>
             </div>
@@ -542,7 +635,7 @@
         }
         if (cmp.routeMin != null) {
           compareBits += (compareBits ? "<br>" : "") +
-            (cmp.isRouteBest ? "同航线历史最低" : `同航线最低 ¥${cmp.routeMin}`);
+            (f.meets_deal_bar && cmp.isRouteBest ? "同航线历史最低" : `同航线最低 ¥${cmp.routeMin}`);
         }
         return `<article class="fare-card ${f.meets_deal_bar ? "deal" : ""} ${f.is_example ? "example" : ""}" data-id="${f.id}" data-source="${f.source}">
           <div class="fare-card-top">
@@ -556,10 +649,11 @@
             <div>${escapeHtml(dest || "—")} · ${escapeHtml(f.trip_type)} · ${escapeHtml(dates)}</div>
             <div>${escapeHtml(f.airline || "—")} · ${escapeHtml(f.stops || "—")}</div>
             <div>发现 ${escapeHtml(formatFoundAt(f.found_at))}</div>
-            ${f.notes ? `<div class="notes-clamp" style="max-width:100%">${escapeHtml(f.notes)}</div>` : ""}
+            ${(() => { const t = extractNoteLinks(f.notes).text; return t ? `<div class="notes-clamp" style="max-width:100%">${escapeHtml(t)}</div>` : ""; })()}
           </div>
           ${compareBits ? `<div class="fare-card-compare">${compareBits}</div>` : ""}
           <div class="fare-card-actions">
+            ${noteLinksHtml(f.notes)}
             <button class="btn btn-sm" data-act="edit">编辑</button>
             <button class="btn btn-sm btn-danger" data-act="del">删除</button>
           </div>
@@ -767,9 +861,8 @@
 
   function fillForm(fare) {
     const form = $("#fare-form");
-    $$(".origin-tags input", form).forEach((inp) => {
-      inp.checked = fare ? normalizeOrigin(fare.origin).includes(inp.value) : false;
-    });
+    const origins = fare ? normalizeOrigin(fare.origin) : [];
+    form.origin.value = origins[0] || "CAN";
     form.destination_country.value = fare?.destination_country || "";
     form.destination_city.value = fare?.destination_city || "";
     form.destination_airport.value = fare?.destination_airport || "";
@@ -807,7 +900,7 @@
 
   function readForm() {
     const form = $("#fare-form");
-    const origin = $$(".origin-tags input:checked", form).map((i) => i.value);
+    const origin = form.origin.value ? [form.origin.value] : [];
     const overrideVal = form.deal_override.value;
     const deal_bar_override =
       overrideVal === "true" ? true : overrideVal === "false" ? false : null;
@@ -982,12 +1075,14 @@
   function resetFilters() {
     state.filter.country = "";
     state.filter.origin = "";
-    state.filter.deal = "all";
+    state.filter.deal = "deal";
     state.filter.q = "";
     state.filter.maxPrice = "";
+    state.sort = { key: "price_cny", dir: "asc" };
     // keep showExamples as user preference
+    saveLocal();
     renderTable();
-    toast("已清空筛选");
+    toast("已重置为只看好价 · 价格从低到高");
   }
 
   function bind() {
@@ -1069,6 +1164,7 @@
     });
     $("#filter-deal").addEventListener("change", (e) => {
       state.filter.deal = e.target.value;
+      saveLocal();
       renderTable();
     });
     $("#filter-sort").addEventListener("change", (e) => applySortValue(e.target.value));

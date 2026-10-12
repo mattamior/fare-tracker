@@ -41,8 +41,8 @@
       </div>
     </header>
 
-    <section class="prefs" aria-label="盯价偏好">
-      <button type="button" class="prefs-toggle" id="prefs-toggle" aria-expanded="true">
+    <section class="prefs collapsed" aria-label="盯价偏好">
+      <button type="button" class="prefs-toggle" id="prefs-toggle" aria-expanded="false">
         <h2>盯价偏好与门槛</h2>
         <span class="prefs-chevron" aria-hidden="true">▾</span>
       </button>
@@ -51,8 +51,11 @@
         <div class="bars" id="bars"></div>
         <p class="data-note muted">
           主数据来自 <code>data/fares.json</code>；浏览器增删改保存在本机 localStorage，与文件记录合并显示。
-          「清空本地改动」只清浏览器侧，不影响仓库文件。
         </p>
+        <div class="prefs-danger">
+          <button type="button" class="btn btn-sm btn-danger" id="btn-reset-local" title="清空浏览器本地增改">清空本地改动</button>
+          <span class="muted prefs-danger-hint">只清浏览器侧，不影响仓库文件</span>
+        </div>
       </div>
     </section>
 
@@ -68,8 +71,7 @@
         <div class="card-head">
           <h2>票价列表</h2>
           <div class="card-head-actions">
-            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-filters">清空筛选</button>
-            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-local" title="清空浏览器本地增改">清空本地</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-filters">重置筛选</button>
           </div>
         </div>
         <div class="card-body">
@@ -87,17 +89,17 @@
             </label>
             <label class="field">好价
               <select id="filter-deal">
+                <option value="deal" selected>只看好价</option>
                 <option value="all">全部</option>
-                <option value="deal">只看好价</option>
                 <option value="normal">只看普通</option>
               </select>
             </label>
             <label class="field">排序
               <select id="filter-sort">
+                <option value="price_cny:asc" selected>价格从低到高</option>
+                <option value="price_cny:desc">价格从高到低</option>
                 <option value="found_at:desc">发现时间 ↓</option>
                 <option value="found_at:asc">发现时间 ↑</option>
-                <option value="price_cny:asc">价格从低到高</option>
-                <option value="price_cny:desc">价格从高到低</option>
                 <option value="depart_date:asc">出发日期 ↑</option>
                 <option value="depart_date:desc">出发日期 ↓</option>
                 <option value="destination_country:asc">国家 A→Z</option>
@@ -118,6 +120,12 @@
           </div>
 
           <div class="active-filters" id="active-filters" hidden></div>
+
+          <div class="compare-panel compare-panel-top" id="compare-panel">
+            <h3>好价对比速览</h3>
+            <div id="compare-body" class="compare-body"></div>
+          </div>
+
 
           <!-- Desktop table -->
           <div class="table-wrap desktop-only">
@@ -151,10 +159,6 @@
           </div>
           <div class="chart-legend" id="chart-legend"></div>
 
-          <div class="compare-panel" id="compare-panel">
-            <h3>好价对比速览</h3>
-            <div id="compare-body" class="compare-body"></div>
-          </div>
         </div>
       </aside>
     </div>
@@ -169,18 +173,17 @@
         <h3 id="modal-title">新增机票记录</h3>
         <button type="button" class="btn btn-sm" id="btn-close-modal">关闭</button>
       </div>
+      <form id="fare-form" class="modal-form">
       <div class="modal-body">
-        <form id="fare-form">
           <div class="form-grid">
-            <div class="full">
-              <div class="field">出发机场（可多选）</div>
-              <div class="origin-tags" style="margin-top:6px">
-                <label><input type="checkbox" value="CAN" /> CAN 广州</label>
-                <label><input type="checkbox" value="SZX" /> SZX 深圳</label>
-                <label><input type="checkbox" value="ZUH" /> ZUH 珠海</label>
-                <label><input type="checkbox" value="HKG" /> HKG 香港</label>
-              </div>
-            </div>
+            <label class="field full">出发机场
+              <select name="origin" id="form-origin" required>
+                <option value="CAN">CAN 广州</option>
+                <option value="SZX">SZX 深圳</option>
+                <option value="ZUH">ZUH 珠海</option>
+                <option value="HKG">HKG 香港</option>
+              </select>
+            </label>
             <label class="field">目的地国家
               <input name="destination_country" list="country-list" required placeholder="泰国 / 马来西亚 / 印尼 / 越南" />
               <datalist id="country-list">
@@ -231,12 +234,12 @@
               <textarea name="notes" placeholder="周末+请假窗口 / 行李额 / 链接…"></textarea>
             </label>
           </div>
-          <div class="form-actions">
+      </div>
+      <div class="form-actions modal-footer">
             <button type="submit" class="btn btn-primary">保存</button>
             <button type="button" class="btn" id="btn-close-modal-2">取消</button>
-          </div>
-        </form>
       </div>
+        </form>
     </div>
   </div>
 

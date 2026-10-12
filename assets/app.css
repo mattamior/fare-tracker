@@ -814,3 +814,114 @@ tr.example-row:hover { opacity: 1; }
   max-width: 200px;
   word-break: break-word;
 }
+
+
+/* —— UX: prefs danger zone (clear local, away from filter reset) —— */
+.prefs-danger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+.prefs-danger-hint { font-size: 0.75rem; }
+
+/* —— UX: compare panel above list —— */
+.compare-panel-top {
+  margin: 4px 0 14px;
+  padding: 12px 12px 10px;
+  border: 1px solid var(--deal-border);
+  border-radius: 12px;
+  background: var(--stat-deal-bg);
+}
+.compare-panel-top h3 {
+  margin: 0 0 10px;
+  font-size: 0.92rem;
+}
+.compare-panel-top .compare-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (min-width: 900px) {
+  .compare-panel-top .compare-body {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .compare-panel-top .compare-body {
+    grid-template-columns: 1fr;
+  }
+}
+.compare-panel-top .compare-row {
+  background: var(--surface);
+}
+
+/* —— UX: book / search link buttons —— */
+.book-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.row-actions .book-links { margin-bottom: 6px; width: 100%; }
+.fare-card-actions .book-links { width: 100%; margin-bottom: 2px; }
+.btn-book {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.btn-book:hover {
+  filter: brightness(1.05);
+  color: #fff;
+}
+[data-theme="dark"] .btn-book {
+  color: #0b1220;
+}
+
+/* —— UX: sticky modal save footer —— */
+.modal {
+  max-height: min(92vh, 920px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+.modal-body {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.modal-footer {
+  flex-shrink: 0;
+  margin-top: 0;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--modal-bg);
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  box-shadow: 0 -8px 16px rgba(15, 23, 42, 0.06);
+}
+[data-theme="dark"] .modal-footer {
+  box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.35);
+}
+.modal-backdrop {
+  align-items: center;
+  padding: 16px 12px;
+}
