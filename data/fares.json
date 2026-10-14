@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-13T08:59:47+08:00",
-  "next_id": 43,
+  "updated_at": "2026-10-14T08:51:39+08:00",
+  "next_id": 51,
   "fares": [
     {
       "id": 1,
@@ -842,6 +842,166 @@
       "found_at": "2026-10-13T08:59:47+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 43,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-15",
+      "return_date": "",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 342,
+      "notes": "早报：比昨 392 更低；Google 标「目前价格较低」；临近出发请复核；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTE1agcIARIDQ0FOcgcIARIDQktLQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": true,
+      "is_example": false
+    },
+    {
+      "id": 44,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "往返",
+      "depart_date": "2026-10-15",
+      "return_date": "2026-10-25",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 1062,
+      "notes": "单程好价配+10最划算（+4=1161 +7=1457）；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTE1agcIARIDQ0FOcgcIARIDQktLQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": false,
+      "is_example": false
+    },
+    {
+      "id": 45,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-11-13",
+      "return_date": "",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 569,
+      "notes": "日历多日同价含周四周五与春节前1/16；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTExLTEzagcIARIDQ0FOcgcIARIDU0dOQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": true,
+      "is_example": false
+    },
+    {
+      "id": 46,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "往返",
+      "depart_date": "2026-10-16",
+      "return_date": "2026-10-26",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 1131,
+      "notes": "+10最划算（+4=1229 +7=1148）；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTE2agcIARIDQ0FOcgcIARIDU0dOQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": false,
+      "is_example": false
+    },
+    {
+      "id": 47,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-30",
+      "return_date": "",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 740,
+      "notes": "10/26–10/30 多日740；高于昨575但仍低于1000；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTMwagcIARIDQ0FOcgcIARIDQ0dLQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": true,
+      "is_example": false
+    },
+    {
+      "id": 48,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "往返",
+      "depart_date": "2026-10-30",
+      "return_date": "2026-11-03",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 1497,
+      "notes": "+4最划算（+7=1697 +10=1597）；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTMwagcIARIDQ0FOcgcIARIDQ0dLQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": false,
+      "is_example": false
+    },
+    {
+      "id": 49,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-30",
+      "return_date": "",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 740,
+      "notes": "周四周五等740；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTMwagcIARIDU1pYcgcIARIDQ0dLQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": true,
+      "is_example": false
+    },
+    {
+      "id": 50,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "往返",
+      "depart_date": "2026-10-30",
+      "return_date": "2026-11-03",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 1497,
+      "notes": "+4/+7/+10 同价1497；https://www.google.com/travel/flights/search?tfs=CBwQAhoeEgoyMDI2LTEwLTMwagcIARIDU1pYcgcIARIDQ0dLQAFIAXABggELCP___________wGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-14T08:50:00+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": false,
       "is_example": false
     }
   ]
