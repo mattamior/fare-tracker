@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-14T08:51:39+08:00",
-  "next_id": 51,
+  "updated_at": "2026-10-15T08:35:07+08:00",
+  "next_id": 57,
   "fares": [
     {
       "id": 1,
@@ -1002,6 +1002,126 @@
       "found_at": "2026-10-14T08:50:00+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": false,
+      "is_example": false
+    },
+    {
+      "id": 51,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-10-22",
+      "return_date": "",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 492,
+      "notes": "早报：下周四周五；够泰国门槛但高于昨临近出发342；九元同日直飞约500；https://www.google.com/travel/flights/search?tfs=EAAaHhIKMjAyNi0xMC0yMmoHCAESA0NBTnIHCAESA0JLS0ABSAGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-15T08:35:06+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 52,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "往返",
+      "depart_date": "2026-10-22",
+      "return_date": "2026-10-29",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 1111,
+      "notes": "单程好价配+7最划算（+4/+10约1309）；Google标目前价格较低",
+      "found_at": "2026-10-15T08:35:07+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 53,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-11-05",
+      "return_date": "",
+      "airline": "Vietravel Airlines",
+      "stops": "直飞",
+      "price_cny": 517,
+      "notes": "周四；与10/13记录的516接近；https://www.google.com/travel/flights/search?tfs=EAAaHhIKMjAyNi0xMS0wNWoHCAESA1NaWHIHCAESA1NHTkABSAGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-15T08:35:07+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 54,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明",
+      "destination_airport": "SGN",
+      "trip_type": "往返",
+      "depart_date": "2026-11-05",
+      "return_date": "2026-11-09",
+      "airline": "Vietravel Airlines",
+      "stops": "直飞",
+      "price_cny": 1012,
+      "notes": "+4/+7/+10同价1012；低价",
+      "found_at": "2026-10-15T08:35:07+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 55,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-05",
+      "return_date": "",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 740,
+      "notes": "周四；与昨10/30的740同价；Google标低价比平日低约200；https://www.google.com/travel/flights/search?tfs=EAAaHhIKMjAyNi0xMS0wNWoHCAESA1NaWHIHCAESA0NHS0ABSAGYAQI&hl=zh-CN&curr=CNY&gl=CN",
+      "found_at": "2026-10-15T08:35:07+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 56,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "往返",
+      "depart_date": "2026-11-05",
+      "return_date": "2026-11-09",
+      "airline": "春航",
+      "stops": "直飞",
+      "price_cny": 1497,
+      "notes": "+4/+7同价1497，+10为1597",
+      "found_at": "2026-10-15T08:35:07+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
       "is_example": false
     }
   ]
