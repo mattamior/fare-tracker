@@ -1,6 +1,6 @@
 # Current State — fare-tracker
 
-Updated: 2026-10-12 (Asia/Shanghai)
+Updated: 2026-10-19 (Asia/Shanghai)
 
 ## Project
 Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://mattamior.github.io/fare-tracker/ · data in `data/fares.json` (+ localStorage edits).
@@ -14,3 +14,6 @@ Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://matt
 - Icons from Uber Base / Base Web (MIT) sprite under `assets/`.
 - Desktop (≥761px) forced table rows; ≤760px card layout.
 - Mobile cards prioritize booking; edit/delete tucked into overflow / more menu. Desktop table also shows clear book CTAs.
+
+## Maintenance
+- 2026-10-19: `data/fares.json` 去重，删除 6 条完全重复记录（47 真实 + 3 示例）；页面展示不变。
