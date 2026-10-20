@@ -66,6 +66,10 @@ const AIRLINE = {
   "Garuda Indonesia": "印尼鹰航",
   "Thai Airways": "泰航",
   "Hong Kong Airlines": "香港航空",
+  "Hong Kong Express": "香港快运",
+  "HK Express": "香港快运",
+  "Greater Bay Airlines": "大湾区航空",
+  "Thai VietJet": "泰越捷",
 };
 
 function parseArgs(argv) {
