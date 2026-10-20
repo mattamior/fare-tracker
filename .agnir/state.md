@@ -31,3 +31,4 @@ Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://matt
 - 2026-10-21 01:00 整点扫票：CAN-BKK 11-04 ¥792、HKG-CGK 11-11 ¥1792、CAN-SGN 11-18 ¥569，新增 3 条（id 84–86）。数据 80 条。
 - 2026-10-21 02:00 整点扫票：HKG-CGK 11-04 ¥1800、CAN-SGN 11-11 ¥569，新增 2 条（id 87–88）；SZX-DPS 11-18 无直飞，跳过。数据 82 条。
 - 2026-10-21 03:00 整点扫票：CAN-SGN 11-04 ¥569、HKG-KUL 11-18 ¥912，新增 2 条（id 89–90）；SZX-DPS 11-11 无直飞，跳过。数据 84 条。
+- 2026-10-21 04:00 整点扫票：HKG-KUL 11-11 ¥984、CAN-CGK 11-18 ¥740，新增 2 条（id 91–92）；SZX-DPS 11-04 无直飞，跳过。数据 86 条。
