@@ -123,6 +123,29 @@ node scripts/add-fare.mjs --json '{"origin":["HKG"],"destination_country":"越�
 
 门槛读 `data/settings.json`。
 
+### 方式 C：Google Flights 自动扫票（headless Chrome）
+
+Google Flights 对无 JS 的请求只会返回空壳，Skyscanner / Kayak / Kiwi 等则会返回 captcha 或纯 JS 页面，`curl` / `fetch` 都取不到价。本脚本改用本机 Chrome 无头渲染，再从渲染结果中解析单程直飞票价。
+
+```bash
+node scripts/scan-google-flights.mjs --from SZX --to KUL --date 2026-11-06
+```
+
+输出 JSON 数组（每条含航线、航司、起飞时间、时长、CNY 票价与可回溯的 Google Flights 搜索 URL），可直接挑最低价喂给 `add-fare.mjs`：
+
+```bash
+node scripts/scan-google-flights.mjs --from SZX --to KUL --date 2026-11-06 \
+  | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const a=JSON.parse(s).sort((x,y)=>x.price_cny-y.price_cny);console.log(JSON.stringify(a[0]))})'
+```
+
+限制与注意：
+
+- 需要 macOS 上已安装 Chrome / Chromium / Edge（可用 `--chrome <path>` 指定）；每次渲染约 3–10 秒。
+- 只解析**单程、直飞**卡片；往返、经停不抓。
+- 票价是查询时刻的快照，含税但可能随库存变动；写入时把来源 URL 放进 `notes`，便于复核。
+- 高频请求可能触发 Google 风控或页面结构变动导致解析为空；脚本此时输出 `[]` 并以 0 退出，按“本轮无新票”处理，不要伪造数据。
+- 抓取 Google Flights 可能与其服务条款存在冲突，是否长期启用由项目所有者决定。
+
 ## 目录
 
 ```
@@ -133,6 +156,7 @@ fare-tracker/
   data/fares.json      # 主数据（Agent 写入这里）
   data/settings.json   # 门槛与偏好
   scripts/add-fare.mjs # CLI 追加
+  scripts/scan-google-flights.mjs # Google Flights 扫票（headless Chrome）
   scripts/serve.sh     # 可选启动脚本
   README.md
 ```
