@@ -61,6 +61,8 @@ const AIRLINE = {
   Scoot: "酷航",
   VietJet: "越捷",
   "VietJet Air": "越捷",
+  Vietjet: "越捷",
+  "Vietjet Air": "越捷",
   "Malaysia Airlines": "马航",
   "Cathay Pacific": "国泰",
   "Garuda Indonesia": "印尼鹰航",
