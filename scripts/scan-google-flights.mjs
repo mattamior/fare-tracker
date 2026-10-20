@@ -180,7 +180,13 @@ function parseCards(lines, requested) {
     const airlineRaw = m[4].trim();
     if (!airlineRaw || airlineRaw === "Multiple airlines") continue;
     const airline = AIRLINE[airlineRaw] || airlineRaw;
-    const priceMatch = /CN¥([\d,]+)/.exec(text.slice(m.index + m[0].length, m.index + m[0].length + 600));
+    // 价格必须出现在本卡片的 "Departure" 之前；"Price unavailable" 的卡片直接跳过，
+    // 避免把相邻卡片或页脚的价格误记到这条航班上。
+    const tail = text.slice(m.index + m[0].length, m.index + m[0].length + 400);
+    const departIdx = tail.indexOf("Departure");
+    const priceScope = departIdx >= 0 ? tail.slice(0, departIdx) : tail;
+    if (priceScope.includes("Price unavailable")) continue;
+    const priceMatch = /CN¥([\d,]+)/.exec(priceScope);
     if (!priceMatch) continue;
     const price = Number(priceMatch[1].replace(/,/g, ""));
     if (!Number.isFinite(price) || price <= 0) continue;
