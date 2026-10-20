@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-21T00:00:33+08:00",
-  "next_id": 84,
+  "updated_at": "2026-10-21T01:00:26+08:00",
+  "next_id": 87,
   "fares": [
     {
       "id": 1,
@@ -1541,6 +1541,66 @@
       "notes": "Google Flights 扫票 2026-10-21 00:00 9:00 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-11-18",
       "found_at": "2026-10-21T00:00:33+08:00",
       "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 84,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-04",
+      "return_date": "",
+      "airline": "春秋航空",
+      "stops": "直飞",
+      "price_cny": 792,
+      "notes": "Google Flights 扫票 2026-10-21 01:00 5:55 AM 起飞 2 hr 55 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-11-04",
+      "found_at": "2026-10-21T01:00:26+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 85,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-11",
+      "return_date": "",
+      "airline": "印尼鹰航",
+      "stops": "直飞",
+      "price_cny": 1792,
+      "notes": "Google Flights 扫票 2026-10-21 01:00 9:00 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-11-11",
+      "found_at": "2026-10-21T01:00:26+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 86,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明市",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-11-18",
+      "return_date": "",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 569,
+      "notes": "Google Flights 扫票 2026-10-21 01:00 2:30 AM 起飞 2 hr 40 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Ho%20Chi%20Minh%20City%20on%202026-11-18",
+      "found_at": "2026-10-21T01:00:26+08:00",
+      "meets_deal_bar": true,
       "deal_bar_override": null,
       "is_example": false
     }
