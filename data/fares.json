@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-21T14:00:24+08:00",
-  "next_id": 106,
+  "updated_at": "2026-10-21T17:02:27+08:00",
+  "next_id": 107,
   "fares": [
     {
       "id": 1,
@@ -1864,7 +1864,9 @@
       "found_at": "2026-10-21T07:00:21+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 106,
+      "superseded_at": "2026-10-21T17:02:27+08:00"
     },
     {
       "id": 100,
@@ -1982,6 +1984,26 @@
       "price_cny": 912,
       "notes": "Google Flights 扫票 2026-10-21 14:00 11:55 AM 起飞 4 hr 5 min（较 04:00 的 ¥984 降价）；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-11",
       "found_at": "2026-10-21T14:00:24+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 106,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-04",
+      "return_date": "",
+      "airline": "深圳航空",
+      "stops": "直飞",
+      "price_cny": 1079,
+      "notes": "Google Flights 扫票 2026-10-21 17:00 8:55 AM 起飞 3 hr 15 min（较 07:00 的 ¥1259 降价）；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Bangkok%20on%202026-11-04",
+      "found_at": "2026-10-21T17:02:27+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
