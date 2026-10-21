@@ -556,8 +556,8 @@ tr.example-row:hover { opacity: 1; }
   border-color: var(--deal-strong);
   color: var(--deal-strong);
 }
-/* 历史机票图标固定黑色，不随明暗主题与按钮状态变化 */
-#btn-view .icon {
+/* 历史机票图标：亮色主题固定黑色；暗色主题跟随按钮文字色 */
+html:not([data-theme="dark"]) #btn-view .icon {
   color: #000;
   fill: #000;
 }
