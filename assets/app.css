@@ -552,6 +552,10 @@ tr.example-row:hover { opacity: 1; }
   border-color: var(--badge-normal-border);
   text-decoration: line-through;
 }
+#btn-view[aria-pressed="true"] {
+  border-color: var(--deal-strong);
+  color: var(--deal-strong);
+}
 tr.superseded-row .price {
   text-decoration: line-through;
   opacity: 0.55;

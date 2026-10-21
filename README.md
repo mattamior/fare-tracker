@@ -125,6 +125,8 @@ node scripts/add-fare.mjs --json '{"origin":["HKG"],"destination_country":"越�
 
 **降价取代标记（可选字段）**：同一航线、同一出发日出现更低价时，新价作为新记录写入，旧记录保留并加标记：`"superseded_by": <新记录 id>`、`"superseded_at": "<新记录 found_at>"`。页面上旧记录显示「已取代」徽标并划去价格；未加标记的记录不受影响。
 
+**历史机票页**：出行日已过（单程看出发日，往返看返程日，按 Asia/Shanghai 当天判断）的记录不再混在「票价列表」里，改由顶栏「历史机票（N）」按钮切换查看，地址为 `#history`；数据文件不变，过期判断完全在页面端完成。
+
 ### 方式 C：Google Flights 自动扫票（headless Chrome）
 
 Google Flights 对无 JS 的请求只会返回空壳，Skyscanner / Kayak / Kiwi 等则会返回 captcha 或纯 JS 页面，`curl` / `fetch` 都取不到价。本脚本改用本机 Chrome 无头渲染，再从渲染结果中解析单程直飞票价。

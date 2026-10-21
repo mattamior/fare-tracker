@@ -39,3 +39,4 @@ Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://matt
 - 2026-10-21 09:00 整点扫票：SZX-KUL 11-11 ¥718、CAN-BKK 11-18 ¥592，新增 2 条（id 103–104）；ZUH-KUL 11-04 无直飞，跳过。数据 98 条。
 - 2026-10-21 14:00 整点扫票：HKG-KUL 11-11 ¥912（较 04:00 的 ¥984 降价），新增 1 条（id 105）；CAN-CGK 11-18 持平跳过；SZX-DPS 11-04 无直飞。数据 99 条。
 - 2026-10-21 14:31 降价取代标记：旧记录保留，新增可选字段 `superseded_by` / `superseded_at`；id 91 标记为被 id 105 取代。页面新增「已取代」徽标与划线价（assets/app.js、app.css），README 与 decisions.md 同步。
+- 2026-10-21 15:20 历史机票页：出行日已过的记录移入「历史机票」视图（顶栏按钮，`#history`），有效列表不再包含过期票；统计卡片随视图切换。index.html / app.js / app.css 改动，README 与 decisions.md 同步。

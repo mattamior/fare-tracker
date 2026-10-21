@@ -112,6 +112,9 @@
           <span class="theme-label theme-when-light">暗色</span>
           <span class="theme-label theme-when-dark">亮色</span>
         </button>
+        <button type="button" class="btn" id="btn-view" aria-pressed="false" title="在有效机票与历史（已过期）之间切换">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-calendar"></use></svg><span id="btn-view-label">历史机票</span>
+        </button>
         <button type="button" class="btn" id="btn-settings"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-filter"></use></svg><span>门槛设置</span></button>
         <button type="button" class="btn" id="btn-export"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-arrow-down"></use></svg><span>导出</span></button>
         <button type="button" class="btn" id="btn-import"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-upload"></use></svg><span>导入</span></button>
@@ -148,7 +151,7 @@
     <div class="layout">
       <section class="card list-card">
         <div class="card-head">
-          <h2>票价列表</h2>
+          <h2 id="list-title">票价列表</h2>
           <div class="card-head-actions">
             <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-filters"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-filter"></use></svg><span>重置筛选</span></button>
           </div>

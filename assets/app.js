@@ -41,6 +41,7 @@
       showExamples: false,
     },
     sort: { key: "price_cny", dir: "asc" },
+    view: "active",
     editingId: null,
     editingSource: null,
     prefsCollapsed: true,
@@ -277,10 +278,27 @@
     }
   }
 
+  /** 今天的 Asia/Shanghai 日期（YYYY-MM-DD），与数据里的日期口径一致。 */
+  function todayYmd() {
+    return new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai" }).format(new Date());
+  }
+
+  /** 最后一次出行日：往返看返程日，单程看出发日。 */
+  function lastTravelDate(fare) {
+    return fare.trip_type === "往返" && fare.return_date ? fare.return_date : fare.depart_date || "";
+  }
+
+  /** 最后出行日早于今天即已过期（进入历史页）。无日期的记录不判为过期。 */
+  function isExpired(fare) {
+    const d = lastTravelDate(fare);
+    return Boolean(d) && d < todayYmd();
+  }
+
   function filteredSorted() {
     let list = allFares();
     const { country, origin, deal, q, maxPrice, showExamples } = state.filter;
     if (!showExamples) list = list.filter((f) => !f.is_example);
+    list = list.filter((f) => (state.view === "history" ? isExpired(f) : !isExpired(f)));
     if (country) list = list.filter((f) => f.destination_country === country);
     if (origin) list = list.filter((f) => normalizeOrigin(f.origin).includes(origin));
     if (deal === "deal") list = list.filter((f) => f.meets_deal_bar);
@@ -498,7 +516,7 @@
 
   function renderStats(list) {
     const all = allFares();
-    const real = all.filter((f) => !f.is_example);
+    const real = all.filter((f) => !f.is_example && (state.view === "history" ? isExpired(f) : !isExpired(f)));
     const deals = real.filter((f) => f.meets_deal_bar).length;
     const min = list.length ? Math.min(...list.map((f) => f.price_cny)) : null;
     $("#stat-real").textContent = String(real.length);
@@ -770,9 +788,25 @@
     return badges.join("");
   }
 
+  /** 同步「历史机票」按钮与列表标题（有效 / 历史两个视图）。 */
+  function renderViewToggle() {
+    const isHist = state.view === "history";
+    const expiredCount = allFares().filter((f) => !f.is_example && isExpired(f)).length;
+    $("#btn-view-label").textContent = isHist ? "返回有效" : `历史机票（${expiredCount}）`;
+    $("#btn-view").setAttribute("aria-pressed", String(isHist));
+    $("#list-title").textContent = isHist ? "历史机票（出行日已过）" : "票价列表";
+  }
+
+  function setView(view) {
+    state.view = view === "history" ? "history" : "active";
+    history.replaceState(null, "", location.pathname + location.search + (state.view === "history" ? "#history" : ""));
+    renderTable();
+  }
+
   function renderTable() {
     const list = filteredSorted();
     const hist = buildHistoryMaps();
+    renderViewToggle();
     renderStats(list);
     renderCountryFilter();
     syncFilterControls();
@@ -782,7 +816,9 @@
 
     if (!list.length) {
       const hasAny = allFares().length > 0;
-      const emptyMsg = hasAny
+      const emptyMsg = state.view === "history"
+        ? `<div class="empty"><strong>暂无历史机票</strong>出行日已过的记录会自动归入这里。</div>`
+        : hasAny
         ? `<div class="empty"><strong>没有符合筛选的记录</strong>点「重置筛选」或改成「全部」看看；也可打开「显示示例」。</div>`
         : `<div class="empty"><strong>暂无真实票价记录</strong>行程管家写入 data/fares.json 并推送后刷新即可；也可点「＋ 新增」。</div>`;
       tbody.innerHTML = `<tr><td colspan="7">${emptyMsg}</td></tr>`;
@@ -1329,6 +1365,8 @@
     );
 
     $("#btn-theme").addEventListener("click", toggleTheme);
+    $("#btn-view").addEventListener("click", () => setView(state.view === "history" ? "active" : "history"));
+    window.addEventListener("hashchange", () => setView(location.hash === "#history" ? "history" : "active"));
     try {
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
         let saved = null;
@@ -1468,6 +1506,7 @@
   }
 
   async function init() {
+    state.view = location.hash === "#history" ? "history" : "active";
     loadLocal();
     await loadFileData();
     bind();
