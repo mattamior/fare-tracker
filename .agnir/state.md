@@ -1,6 +1,6 @@
 # Current State — fare-tracker
 
-Updated: 2026-10-20 (Asia/Shanghai)
+Updated: 2026-10-21 (Asia/Shanghai)
 
 ## Project
 Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://mattamior.github.io/fare-tracker/ · data in `data/fares.json` (+ localStorage edits).
@@ -38,3 +38,4 @@ Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://matt
 - 2026-10-21 08:00 整点扫票：HKG-BKK 11-04 ¥614、SZX-KUL 11-18 ¥675，新增 2 条（id 101–102）；ZUH-KUL 11-11 无直飞，跳过。数据 96 条。
 - 2026-10-21 09:00 整点扫票：SZX-KUL 11-11 ¥718、CAN-BKK 11-18 ¥592，新增 2 条（id 103–104）；ZUH-KUL 11-04 无直飞，跳过。数据 98 条。
 - 2026-10-21 14:00 整点扫票：HKG-KUL 11-11 ¥912（较 04:00 的 ¥984 降价），新增 1 条（id 105）；CAN-CGK 11-18 持平跳过；SZX-DPS 11-04 无直飞。数据 99 条。
+- 2026-10-21 14:31 降价取代标记：旧记录保留，新增可选字段 `superseded_by` / `superseded_at`；id 91 标记为被 id 105 取代。页面新增「已取代」徽标与划线价（assets/app.js、app.css），README 与 decisions.md 同步。

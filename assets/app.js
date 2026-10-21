@@ -115,6 +115,8 @@
           ? raw.deal_bar_override
           : null,
       is_example: Boolean(raw.is_example),
+      superseded_by: Number(raw.superseded_by) > 0 ? Number(raw.superseded_by) : null,
+      superseded_at: raw.superseded_at || null,
       source,
     };
     if (Number.isNaN(fare.price_cny)) fare.price_cny = 0;
@@ -758,6 +760,11 @@
     if (fare.meets_deal_bar && (cmp.isRouteBest || cmp.isCountryBest)) {
       badges.push(`<span class="badge badge-best">历史低</span>`);
     }
+    if (fare.superseded_by) {
+      badges.push(
+        `<span class="badge badge-superseded" title="${escapeAttr(`同航线同日期已有更低价 id ${fare.superseded_by} 取代此价`)}">已取代</span>`
+      );
+    }
     if (fare.is_example) badges.push(`<span class="badge badge-example">示例</span>`);
     if (fare.source === "local") badges.push(`<span class="badge badge-local">本地</span>`);
     return badges.join("");
@@ -796,6 +803,7 @@
         const rowClass = [
           f.meets_deal_bar ? "deal-row" : "",
           f.is_example ? "example-row" : "",
+          f.superseded_by ? "superseded-row" : "",
         ]
           .filter(Boolean)
           .join(" ");

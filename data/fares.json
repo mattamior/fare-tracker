@@ -1702,7 +1702,9 @@
       "found_at": "2026-10-21T04:00:20+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 105,
+      "superseded_at": "2026-10-21T14:00:24+08:00"
     },
     {
       "id": 92,

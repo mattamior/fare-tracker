@@ -546,6 +546,16 @@ tr.example-row:hover { opacity: 1; }
   color: var(--badge-example-color);
   border-color: var(--badge-example-border);
 }
+.badge-superseded {
+  background: var(--badge-normal-bg);
+  color: var(--badge-normal-color);
+  border-color: var(--badge-normal-border);
+  text-decoration: line-through;
+}
+tr.superseded-row .price {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
 .badge-local {
   background: var(--badge-local-bg);
   color: var(--badge-local-color);
