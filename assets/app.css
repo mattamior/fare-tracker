@@ -556,6 +556,11 @@ tr.example-row:hover { opacity: 1; }
   border-color: var(--deal-strong);
   color: var(--deal-strong);
 }
+/* 历史机票图标固定黑色，不随明暗主题与按钮状态变化 */
+#btn-view .icon {
+  color: #000;
+  fill: #000;
+}
 tr.superseded-row .price {
   text-decoration: line-through;
   opacity: 0.55;
