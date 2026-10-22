@@ -13,7 +13,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -92,7 +92,7 @@ function normalizeOrigin(v) {
     .filter(Boolean);
 }
 
-function buildFare(args, settings, id) {
+export function buildFare(args, settings, id) {
   let raw = {};
   if (args.json) {
     raw = typeof args.json === "string" ? JSON.parse(args.json) : args.json;
@@ -170,4 +170,6 @@ function main() {
   console.log(JSON.stringify({ ok: true, path: FARES_PATH, fare }, null, 2));
 }
 
-main();
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  main();
+}

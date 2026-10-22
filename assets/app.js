@@ -388,10 +388,11 @@
       fare.depart_date || "",
       fare.return_date || "",
       Number(fare.price_cny),
+      fare.found_at || "",
     ].join("|");
   }
 
-  /** Same route + date + price → keep one (prefer non-example, newer found_at, file over local). */
+  /** Same route + date + price + observation time → keep one across file/local sources. */
   function dedupeFares(list) {
     const rank = (f) => {
       const t = new Date(f.found_at || 0).getTime() || 0;

@@ -1,6 +1,6 @@
 # Decisions — fare-tracker
 
-Updated: 2026-10-21
+Updated: 2026-10-22
 
 - **2026-10-12** — Price trend is a full-width row under primary fare info, not a table column.
 - **2026-10-12** — Card layout only at ≤760px; wide viewports stay tabular.
@@ -9,5 +9,6 @@ Updated: 2026-10-21
 - **2026-10-12** — Agnir Core/profile `1.0` / `repository-filesystem/1.0` from iorLab/agnir `v1.0.2` (`b5626394ec40a5cb7a28c01892acde07cc0adc8e`).
 - **2026-10-20** — 自动扫票数据源改为 Google Flights + 本机 headless Chrome：fetch/curl 对 Google Flights 只得到空壳，Skyscanner/Kayak/Kiwi 返回 captcha 或纯 JS 页面，均不可用。脚本只录单程直飞、必须附来源 URL；渲染失败或解析为空按“无新票”处理，不写数据。
 - **2026-10-21** — 同航线同出发日出现更低价：新价作为新记录写入，旧记录保留，并用 `superseded_by` / `superseded_at` 标记为「已取代」（页面徽标 + 划线价）。不删除历史记录。
+- **2026-10-22** — 自动扫票记录任一方向的价格变化：新价作为带观测时间的新记录写入，旧活动记录保留并标记为取代。未变化不新增；空扫描/失败不推断票已失效。回到历史金额时仍保留独立观测，页面去重键包含 `found_at`。
 - **2026-10-21** — 过期机票单独放「历史机票」视图（`#history`），不与有效票混放。过期 = 最后出行日（单程出发日 / 往返返程日）早于 Asia/Shanghai 当天；过期判断只在页面端进行，数据文件不改动。
 - **2026-10-21** — 图标颜色统一用 `currentColor`，不写死颜色；唯一例外是亮色主题下的历史按钮图标固定黑色。页面以 `index.html` 内联 sprite 为准，`assets/uber-icons.svg` 是源副本，改图标时两处必须同步。

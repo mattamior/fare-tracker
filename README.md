@@ -123,7 +123,7 @@ node scripts/add-fare.mjs --json '{"origin":["HKG"],"destination_country":"越�
 
 门槛读 `data/settings.json`。
 
-**降价取代标记（可选字段）**：同一航线、同一出发日出现更低价时，新价作为新记录写入，旧记录保留并加标记：`"superseded_by": <新记录 id>`、`"superseded_at": "<新记录 found_at>"`。页面上旧记录显示「已取代」徽标并划去价格；未加标记的记录不受影响。
+**票价变化快照（可选字段）**：自动扫票在同一单程航线/日期发现不同价格（上涨或下跌）时，新增带观测时间的快照，并把此前仍有效的记录标记为取代：`"superseded_by": <新记录 id>`、`"superseded_at": "<新记录 found_at>"`。旧记录保留；价格未变化则不新增。若价格回到历史上出现过的金额，仍记录为新观测（`found_at` 不同），页面会分别展示。空扫描或扫描失败不推断旧票失效，也不更改旧记录状态。页面上被取代记录显示「已取代」徽标并划线。
 
 **历史机票页**：出行日已过（单程看出发日，往返看返程日，按 Asia/Shanghai 当天判断）的记录不再混在「票价列表」里，改由顶栏「历史机票（N）」按钮切换查看，地址为 `#history`；数据文件不变，过期判断完全在页面端完成。
 
@@ -135,11 +135,11 @@ Google Flights 对无 JS 的请求只会返回空壳，Skyscanner / Kayak / Kiwi
 node scripts/scan-google-flights.mjs --from SZX --to KUL --date 2026-11-06
 ```
 
-输出 JSON 数组（每条含航线、航司、起飞时间、时长、CNY 票价与可回溯的 Google Flights 搜索 URL），可直接挑最低价喂给 `add-fare.mjs`：
+输出 JSON 数组（每条含航线、航司、起飞时间、时长、CNY 票价与可回溯的 Google Flights 搜索 URL）。自动任务把输出存到文件后交给 `record-scan-fare.mjs`：
 
 ```bash
-node scripts/scan-google-flights.mjs --from SZX --to KUL --date 2026-11-06 \
-  | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const a=JSON.parse(s).sort((x,y)=>x.price_cny-y.price_cny);console.log(JSON.stringify(a[0]))})'
+node scripts/scan-google-flights.mjs --from SZX --to KUL --date 2026-11-06 > /tmp/scan.json
+node scripts/record-scan-fare.mjs --scan /tmp/scan.json
 ```
 
 限制与注意：
@@ -147,7 +147,7 @@ node scripts/scan-google-flights.mjs --from SZX --to KUL --date 2026-11-06 \
 - 需要 macOS 上已安装 Chrome / Chromium / Edge（可用 `--chrome <path>` 指定）；每次渲染约 3–10 秒。
 - 只解析**单程、直飞**卡片；往返、经停不抓。
 - 票价是查询时刻的快照，含税但可能随库存变动；写入时把来源 URL 放进 `notes`，便于复核。
-- 高频请求可能触发 Google 风控或页面结构变动导致解析为空；脚本此时输出 `[]` 并以 0 退出，按“本轮无新票”处理，不要伪造数据。
+- 高频请求可能触发 Google 风控或页面结构变动导致解析为空；脚本此时输出 `[]` 并以 0 退出。自动任务把空数组和扫描失败都当作“状态未知”，跳过本轮且不把已有票标为失效；不得伪造数据。
 - 抓取 Google Flights 可能与其服务条款存在冲突，是否长期启用由项目所有者决定。
 
 ## 目录
@@ -161,6 +161,7 @@ fare-tracker/
   data/settings.json   # 门槛与偏好
   scripts/add-fare.mjs # CLI 追加
   scripts/scan-google-flights.mjs # Google Flights 扫票（headless Chrome）
+  scripts/record-scan-fare.mjs # 记录价格变化与取代关系
   scripts/serve.sh     # 可选启动脚本
   README.md
 ```
