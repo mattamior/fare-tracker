@@ -43,3 +43,4 @@ Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://matt
 - 2026-10-21 16:55 图标颜色修复：日历图标的 `fill="black"` 改为 `currentColor`，修复暗色主题下图标黑色不可见（提交 a7b9be2、3c01d11）；历史按钮图标亮色固定黑、暗色跟随文字色（提交 1bb62be、5175572）。页面实际使用 `index.html` 内联 sprite，`assets/uber-icons.svg` 为源副本，二者需同步。
 - 2026-10-21 17:00 整点扫票（补跑，规则已改为仅关注数据）：SZX-BKK 11-04 ¥1079 深圳航空（较 07:00 的 ¥1259 降价），新增 1 条（id 106），id 99 标记为被 106 取代；HKG-BKK 11-11、ZUH-KUL 11-18 无直飞，跳过。数据 100 条。
 - 2026-10-22 10:00 整点扫票（10:18 执行）：SZX-KUL 11-05 ¥675、CAN-BKK 11-12 ¥592、HKG-CGK 11-19 ¥1792，新增 3 条（id 107–109）；三条日期原无记录，均附 Google Flights 来源。数据 103 条。
+- 2026-10-22 11:00 整点扫票：CAN-BKK 11-05 ¥992、HKG-CGK 11-12 ¥2174、CAN-SGN 11-19 ¥569，新增 3 条（id 110–112）；三条日期原无记录，均附 Google Flights 来源，无旧价需取代。数据 106 条。
