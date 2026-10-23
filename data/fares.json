@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-24T03:00:38.512+08:00",
-  "next_id": 161,
+  "updated_at": "2026-10-24T04:01:04.739+08:00",
+  "next_id": 163,
   "fares": [
     {
       "id": 1,
@@ -3092,6 +3092,46 @@
       "price_cny": 912,
       "notes": "Google Flights 扫票 2026-10-24 03:00 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-21",
       "found_at": "2026-10-24T03:00:38.512+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 161,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-14",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 1057,
+      "notes": "Google Flights 扫票 2026-10-24 04:01 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-14",
+      "found_at": "2026-10-24T04:01:04.710+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 162,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-21",
+      "return_date": "",
+      "airline": "南航",
+      "stops": "直飞",
+      "price_cny": 1287,
+      "notes": "Google Flights 扫票 2026-10-24 04:01 8:05 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-11-21",
+      "found_at": "2026-10-24T04:01:04.739+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
