@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-23T20:00:51.742+08:00",
-  "next_id": 150,
+  "updated_at": "2026-10-23T22:01:20.041+08:00",
+  "next_id": 151,
   "fares": [
     {
       "id": 1,
@@ -2552,7 +2552,9 @@
       "found_at": "2026-10-23T13:00:37.531+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 150,
+      "superseded_at": "2026-10-23T22:01:20.041+08:00"
     },
     {
       "id": 134,
@@ -2870,6 +2872,26 @@
       "price_cny": 667,
       "notes": "Google Flights 扫票 2026-10-23 20:00 2:30 AM 起飞 2 hr 40 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Ho%20Chi%20Minh%20City%20on%202026-11-20",
       "found_at": "2026-10-23T20:00:51.742+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 150,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-20",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 912,
+      "notes": "Google Flights 扫票 2026-10-23 22:01 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-20",
+      "found_at": "2026-10-23T22:01:20.041+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
