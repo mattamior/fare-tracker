@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-23T12:00:39.939+08:00",
-  "next_id": 132,
+  "updated_at": "2026-10-23T13:00:37.531+08:00",
+  "next_id": 134,
   "fares": [
     {
       "id": 1,
@@ -2506,6 +2506,46 @@
       "price_cny": 2074,
       "notes": "Google Flights 扫票 2026-10-23 12:00 9:00 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-11-06",
       "found_at": "2026-10-23T12:00:39.939+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 132,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明市",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-11-06",
+      "return_date": "",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 569,
+      "notes": "Google Flights 扫票 2026-10-23 13:00 2:30 AM 起飞 2 hr 40 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Ho%20Chi%20Minh%20City%20on%202026-11-06",
+      "found_at": "2026-10-23T13:00:37.503+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 133,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-20",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 913,
+      "notes": "Google Flights 扫票 2026-10-23 13:00 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-20",
+      "found_at": "2026-10-23T13:00:37.531+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
