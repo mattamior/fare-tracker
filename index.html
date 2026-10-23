@@ -19,6 +19,10 @@
       } catch (e) {}
     })();
   </script>
+  <meta name="description" content="珠三角 / 香港出发到东南亚的机票好价记录板，按国家门槛标出好价，一键查看当前最低价与查票链接。" />
+  <meta property="og:title" content="机票盯价 · Fare Tracker" />
+  <meta property="og:description" content="珠三角 / 香港出发 · 东南亚好价记录板" />
+  <meta property="og:type" content="website" />
   <title>机票盯价 · Fare Tracker</title>
   <link rel="stylesheet" href="./assets/app.css" />
 </head>
@@ -93,6 +97,13 @@
   <circle cx="12" cy="12" r="2"/>
   <circle cx="18" cy="12" r="2"/></g>
   </symbol>
+  <!-- sun / moon: Lucide Icons (ISC) -->
+  <symbol id="uber-sun" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></g>
+  </symbol>
+  <symbol id="uber-moon" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></g>
+  </symbol>
   <!-- plane: Lucide Icons (ISC), added because Uber Base public set has no airplane -->
   <symbol id="uber-plane" viewBox="0 0 24 24">
     <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></g>
@@ -107,21 +118,140 @@
       </div>
       <div class="top-actions">
         <button type="button" class="btn btn-theme" id="btn-theme" aria-label="切换明暗模式" title="切换明暗模式">
-          <span class="theme-when-light btn-ico-label" aria-hidden="true"><svg class="icon" focusable="false"><use href="#uber-hide"></use></svg></span>
-          <span class="theme-when-dark btn-ico-label" aria-hidden="true"><svg class="icon" focusable="false"><use href="#uber-show"></use></svg></span>
+          <span class="theme-when-light btn-ico-label" aria-hidden="true"><svg class="icon" focusable="false"><use href="#uber-moon"></use></svg></span>
+          <span class="theme-when-dark btn-ico-label" aria-hidden="true"><svg class="icon" focusable="false"><use href="#uber-sun"></use></svg></span>
           <span class="theme-label theme-when-light">暗色</span>
           <span class="theme-label theme-when-dark">亮色</span>
         </button>
         <button type="button" class="btn" id="btn-view" aria-pressed="false" title="在有效机票与历史（已过期）之间切换">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-calendar"></use></svg><span id="btn-view-label">历史机票</span>
         </button>
-        <button type="button" class="btn" id="btn-settings"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-filter"></use></svg><span>门槛设置</span></button>
-        <button type="button" class="btn" id="btn-export"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-arrow-down"></use></svg><span>导出</span></button>
-        <button type="button" class="btn" id="btn-import"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-upload"></use></svg><span>导入</span></button>
+        <details class="top-more" id="top-more">
+          <summary class="btn" aria-label="更多操作"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-overflow"></use></svg><span>更多</span></summary>
+          <div class="top-more-panel">
+            <button type="button" class="btn" id="btn-settings"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-filter"></use></svg><span>门槛设置</span></button>
+            <button type="button" class="btn" id="btn-export"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-arrow-down"></use></svg><span>导出 JSON</span></button>
+            <button type="button" class="btn" id="btn-import"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-upload"></use></svg><span>导入 JSON</span></button>
+          </div>
+        </details>
         <input type="file" id="import-file" accept="application/json,.json" hidden />
         <button type="button" class="btn btn-primary" id="btn-add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-plus"></use></svg><span>新增</span></button>
       </div>
     </header>
+
+
+    <p class="page-summary" id="page-summary">
+      已记录 <strong id="stat-real">0</strong> 条 · 好价 <strong id="stat-deals">0</strong> 条 · 当前显示 <strong id="stat-filtered">0</strong> 条
+    </p>
+
+    <div class="layout">
+      <section class="card list-card">
+        <div class="card-head">
+          <h2 id="list-title">票价列表</h2>
+          <div class="card-head-actions">
+            <button type="button" class="btn btn-sm btn-primary add-inline" id="btn-add-inline">＋ 新增</button>
+            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-filters"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-filter"></use></svg><span>恢复默认</span></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="notice" id="load-notice" role="status" hidden>
+            <span>远端数据未能读取，当前只显示本地记录。</span>
+            <button type="button" class="btn btn-sm" data-act="retry">重新加载</button>
+          </div>
+          <div class="filters" id="filters">
+            <div class="field field-wide">
+              <span class="field-title">国家</span>
+              <div class="chip-row" id="filter-country" role="group" aria-label="按国家筛选"></div>
+            </div>
+            <div class="field field-wide filters-row">
+              <div class="chip-row" id="filter-deal" role="group" aria-label="好价筛选">
+                <button type="button" class="fchip" data-deal="deal" aria-pressed="true"><span>只看好价</span></button>
+                <button type="button" class="fchip" data-deal="all" aria-pressed="false"><span>全部</span></button>
+              </div>
+              <div class="filters-tools">
+                <label class="field sort-field"><span class="sr-only">排序</span>
+                  <select id="filter-sort" aria-label="排序">
+                    <option value="price_cny:asc" selected>价格从低到高</option>
+                    <option value="price_cny:desc">价格从高到低</option>
+                    <option value="found_at:desc">发现时间 ↓</option>
+                    <option value="found_at:asc">发现时间 ↑</option>
+                    <option value="depart_date:asc">出发日期 ↑</option>
+                    <option value="depart_date:desc">出发日期 ↓</option>
+                    <option value="destination_country:asc">国家 A→Z</option>
+                  </select>
+                </label>
+                <details class="filters-more" id="filters-more">
+                  <summary class="btn btn-sm" aria-haspopup="dialog" aria-controls="filters-dialog">更多筛选<span class="filters-more-count" id="filters-more-count"></span></summary>
+                  <div class="filters-more-panel" id="filters-more-panel">
+                    <div class="filters-panel-head">
+                      <h2 id="filters-dialog-title">更多筛选</h2>
+                      <button type="button" class="btn btn-ghost" id="btn-close-more" aria-label="关闭更多筛选">关闭</button>
+                    </div>
+                    <label class="field">出发机场
+                      <select id="filter-origin"><option value="">全部机场</option>
+                        <option value="CAN">CAN 广州</option>
+                        <option value="SZX">SZX 深圳</option>
+                        <option value="ZUH">ZUH 珠海</option>
+                        <option value="HKG">HKG 香港</option>
+                      </select>
+                    </label>
+                    <label class="field">最高价 ≤
+                      <input id="filter-max-price" type="number" min="0" step="10" placeholder="不限" />
+                    </label>
+                    <label class="field">搜索
+                      <input id="filter-q" type="search" placeholder="航司 / 城市 / 备注…" enterkeyhint="search" />
+                    </label>
+                    <label class="field check-field">好价状态
+                      <span class="check-row">
+                        <input type="checkbox" id="filter-normal" />
+                        <span>只看普通（非好价）</span>
+                      </span>
+                    </label>
+                    <label class="field check-field">示例数据
+                      <span class="check-row">
+                        <input type="checkbox" id="filter-examples" />
+                        <span>显示示例</span>
+                      </span>
+                    </label>
+                    <p class="filters-more-hint" id="filters-more-hint">编辑为草稿；关闭放弃，应用后生效。示例显示独立保留。</p>
+                    <div class="filters-more-actions">
+                      <button type="button" class="btn btn-sm btn-ghost" id="btn-clear-more">清除条件</button>
+                      <button type="button" class="btn btn-primary" id="btn-apply-more">应用筛选</button>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+          <dialog class="filters-dialog" id="filters-dialog" aria-modal="true" aria-labelledby="filters-dialog-title" aria-describedby="filters-more-hint"></dialog>
+
+          <div class="active-filters" id="active-filters" hidden></div>
+
+          <!-- Mobile cards -->
+          <div class="fare-cards" id="fare-cards" aria-live="polite">
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
+          </div>
+
+          <p class="price-note">票价可能变化，实际以查票页面为准。</p>
+          <details class="compare-fold" id="compare-panel">
+            <summary>好价对比速览</summary>
+            <div id="compare-body" class="compare-body"></div>
+          </details>
+        </div>
+      </section>
+
+      <aside class="card side-card">
+        <div class="card-head"><h2>价格趋势</h2></div>
+        <div class="card-body">
+          <p class="muted chart-hint">按发现时间，分国家折线（当前筛选结果）</p>
+          <div class="chart-box">
+            <svg id="chart-svg" viewBox="0 0 600 220" role="img" aria-label="价格趋势图"></svg>
+          </div>
+          <div class="chart-legend" id="chart-legend"></div>
+
+        </div>
+      </aside>
+    </div>
 
     <section class="prefs collapsed" aria-label="盯价偏好">
       <button type="button" class="prefs-toggle" id="prefs-toggle" aria-expanded="false">
@@ -140,110 +270,6 @@
         </div>
       </div>
     </section>
-
-    <div class="stats" id="stats-row">
-      <div class="stat"><div class="k">真实记录</div><div class="v" id="stat-real">0</div></div>
-      <div class="stat deal"><div class="k">触及好价</div><div class="v" id="stat-deals">0</div></div>
-      <div class="stat"><div class="k">当前最低</div><div class="v" id="stat-min">—</div></div>
-      <div class="stat"><div class="k">筛选结果</div><div class="v" id="stat-filtered">0</div></div>
-    </div>
-
-    <div class="layout">
-      <section class="card list-card">
-        <div class="card-head">
-          <h2 id="list-title">票价列表</h2>
-          <div class="card-head-actions">
-            <button type="button" class="btn btn-sm btn-ghost" id="btn-reset-filters"><svg class="icon" aria-hidden="true" focusable="false"><use href="#uber-filter"></use></svg><span>重置筛选</span></button>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="filters" id="filters">
-            <label class="field">国家
-              <select id="filter-country"><option value="">全部国家</option></select>
-            </label>
-            <label class="field">出发机场
-              <select id="filter-origin"><option value="">全部机场</option>
-                <option value="CAN">CAN 广州</option>
-                <option value="SZX">SZX 深圳</option>
-                <option value="ZUH">ZUH 珠海</option>
-                <option value="HKG">HKG 香港</option>
-              </select>
-            </label>
-            <label class="field">好价
-              <select id="filter-deal">
-                <option value="deal" selected>只看好价</option>
-                <option value="all">全部</option>
-                <option value="normal">只看普通</option>
-              </select>
-            </label>
-            <label class="field">排序
-              <select id="filter-sort">
-                <option value="price_cny:asc" selected>价格从低到高</option>
-                <option value="price_cny:desc">价格从高到低</option>
-                <option value="found_at:desc">发现时间 ↓</option>
-                <option value="found_at:asc">发现时间 ↑</option>
-                <option value="depart_date:asc">出发日期 ↑</option>
-                <option value="depart_date:desc">出发日期 ↓</option>
-                <option value="destination_country:asc">国家 A→Z</option>
-              </select>
-            </label>
-            <label class="field">最高价 ≤
-              <input id="filter-max-price" type="number" min="0" step="10" placeholder="不限" />
-            </label>
-            <label class="field">搜索
-              <input id="filter-q" type="search" placeholder="航司 / 城市 / 备注…" enterkeyhint="search" />
-            </label>
-            <label class="field check-field">示例数据
-              <span class="check-row">
-                <input type="checkbox" id="filter-examples" />
-                <span>显示示例</span>
-              </span>
-            </label>
-          </div>
-
-          <div class="active-filters" id="active-filters" hidden></div>
-
-          <div class="compare-panel compare-panel-top" id="compare-panel">
-            <h3>好价对比速览</h3>
-            <div id="compare-body" class="compare-body"></div>
-          </div>
-
-
-          <!-- Desktop table -->
-          <div class="table-wrap desktop-only">
-            <table>
-              <thead>
-                <tr>
-                  <th data-sort="destination_country">航线 <span class="sort"></span></th>
-                  <th data-sort="depart_date">日期 <span class="sort"></span></th>
-                  <th data-sort="airline">航司 / 经停 <span class="sort"></span></th>
-                  <th data-sort="price_cny">价格对比 <span class="sort"></span></th>
-                  <th data-sort="found_at">发现时间 <span class="sort"></span></th>
-                  <th>备注</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody id="fare-tbody"></tbody>
-            </table>
-          </div>
-
-          <!-- Mobile cards -->
-          <div class="fare-cards mobile-only" id="fare-cards"></div>
-        </div>
-      </section>
-
-      <aside class="card side-card">
-        <div class="card-head"><h2>价格趋势</h2></div>
-        <div class="card-body">
-          <p class="muted chart-hint">按发现时间，分国家折线（当前筛选结果）</p>
-          <div class="chart-box">
-            <svg id="chart-svg" viewBox="0 0 600 220" role="img" aria-label="价格趋势图"></svg>
-          </div>
-          <div class="chart-legend" id="chart-legend"></div>
-
-        </div>
-      </aside>
-    </div>
 
     <p class="footer-note">机票盯价 · 静态站 · 无外网依赖 · 数据以 data/fares.json 为准</p>
     <p class="footer-note footer-attr">图标来自 <a href="https://github.com/uber/baseweb" target="_blank" rel="noopener noreferrer">Uber Base Web (baseui)</a> v18.2.0，MIT 许可；详见 <a href="./assets/BASEUI-ICONS-NOTICE.txt">NOTICE</a> / <a href="./assets/BASEUI-ICON-LICENSE.txt">LICENSE</a>。</p>
@@ -343,7 +369,8 @@
     </div>
   </div>
 
-  <div class="toast" id="toast" role="status"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="undo-toast" id="undo-toast" role="status" aria-live="polite" hidden></div>
   <script src="./assets/app.js"></script>
 </body>
 </html>

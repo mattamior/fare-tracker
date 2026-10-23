@@ -1,19 +1,25 @@
 # Current State — fare-tracker
 
-Updated: 2026-10-22 (Asia/Shanghai)
+Updated: 2026-10-23 (Asia/Shanghai)
 
 ## Project
 Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://mattamior.github.io/fare-tracker/ · data in `data/fares.json` (+ localStorage edits).
 
-## Shipped recently
-- Deal-first default filter; sort price ascending; deal compare block above the list.
-- Notes links rendered as prominent **查票 / 下单** buttons.
-- Deduped duplicate fares; 「历史低」 only on real deals.
-- **价格趋势** on its own row (not a wasted column).
-- One-way rows can expand **推荐返程** (~+4 / +7 / +10 days) from same-route round-trips / notes; empty → 「暂无推荐返程」.
+## Current UX / quality state
+- Deal-first default filter; price ascending; comparison summary below the list.
+- Desktop (≥761px) keeps wide fare rows; ≤760px uses mobile cards. At 390×844, the first fare begins at y=381px and the sample first card is 211px tall. Mobile cards place lookup and details side-by-side with 44px targets; edit/delete remain in the detail disclosure.
+- Mobile country chips stay in one horizontally scrollable row with a right-edge fade, selected/focused chip visibility, preserved Tab order, and 44px targets.
+- Mobile extra filters use a native modal dialog with a visible title and close action; the clear-draft/apply footer stays available while scrolling. Background isolation, native focus containment, Escape/cancel, focus restoration, scroll lock, and relocation across the 760px breakpoint remain covered.
+- Filter edits remain drafts until applied; closing discards them. 「清除条件」 clears extra-filter draft fields while preserving examples. 「清空全部筛选」 is shown in the active-filter area only when applicable; it clears country and returns deal to all while preserving example visibility and sort.
+- Delete undo is a separate 5-second action bar, independent from normal toasts; only the latest delete is undoable, restores are guarded against duplicates, and confirmed local-data reset cancels a pending undo.
+- Historical-low comparisons use deduped, non-example fares with positive finite prices, valid ISO dates, explicit trip type, and valid three-letter origin/destination airport codes; round trips also require a valid return date. The badge/detail comparison requires at least two valid observations.
+- Details show full-year travel dates and call minima 「历史比较」, not a price trend. One-way rows can still expand **推荐返程** (~+4 / +7 / +10 days) from matching round-trips / notes.
+- Node/Chrome regression harness: `node scripts/test-regressions.mjs`; optional `--screenshots` covers 390 / 768 / 1440 in both themes plus mobile filter modal. Current suite passes, asserts no horizontal overflow at 390×844, 768×1024, 1440×900, mobile first-card y≤385px and 205–225px card height, plus long-text / missing-link / missing-price cases; fixtures do not write real fare data. Physical Safari / VoiceOver and Android Chrome verification remains outstanding.
 - Icons from Uber Base / Base Web (MIT) sprite under `assets/`.
-- Desktop (≥761px) forced table rows; ≤760px card layout.
-- Mobile cards prioritize booking; edit/delete tucked into overflow / more menu. Desktop table also shows clear book CTAs.
+
+## Existing features
+- Notes links remain available as fare lookup/book buttons.
+- Dedupe retains distinct price snapshots by canonical observation time (`found_at` normalized to epoch across timezone offsets); missing/invalid times do not create unique observation identities.
 
 ## Maintenance
 - 2026-10-19: `data/fares.json` 去重，删除 6 条完全重复记录（47 真实 + 3 示例）；页面展示不变。
@@ -51,3 +57,4 @@ Static Pearl River Delta / Hong Kong → SEA fare watchboard. Live: https://matt
 - 2026-10-22 16:00 整点扫票：CAN-CGK 11-05 ¥1517、SZX-BKK 11-12 ¥1259、HKG-BKK 11-19 ¥666，新增 3 条（id 122–124）；三条日期原无记录，无旧价需取代。数据 118 条。
 - 2026-10-22 17:00 整点扫票：SZX-BKK 11-05 ¥1259、HKG-BKK 11-12 ¥614，新增 2 条（id 125–126）；ZUH-KUL 11-19 无直飞，跳过。两个新增日期原无记录，无旧价需取代。数据 120 条。
 - 2026-10-22 17:10 自动扫票策略扩展：新建 `scripts/record-scan-fare.mjs`，当同一单程航线/日期的最新实扫票价上涨或下跌时新增时间戳快照，并标记先前活动记录；价格相同不写，空扫描不判失效。页面 dedupeKey 加 `found_at` 以保留价格回到历史数值时的独立观测；README、decisions.md 与定时任务同步。
+- 2026-10-23 移动 UX 密度优化：国家芯片单行横滑；更多筛选加入标题/顶部关闭与底部固定清除/应用；全量清空迁至已选条件区；查票/详情并排。真实票价数据未修改。

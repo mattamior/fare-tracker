@@ -11,7 +11,9 @@ html[data-theme="light"] {
   --muted: #64748b;
   --primary: #0ea5e9;
   --primary-dark: #0284c7;
-  --deal: #059669;
+  --deal: #047857;
+  --primary-action: #0369a1;
+  --primary-action-hover: #075985;
   --deal-bg: #ecfdf5;
   --deal-border: #6ee7b7;
   --deal-strong: #047857;
@@ -61,7 +63,7 @@ html[data-theme="light"] {
   --chart-box-bg: #f8fafc;
   --chart-box-border: #cbd5e1;
   --chart-grid: #e2e8f0;
-  --chart-label: #94a3b8;
+  --chart-label: #64748b;
   --origin-tag-bg: #ffffff;
   --modal-bg: #ffffff;
   --modal-backdrop: rgba(15, 23, 42, 0.45);
@@ -84,6 +86,8 @@ html[data-theme="dark"] {
   --primary: #38bdf8;
   --primary-dark: #7dd3fc;
   --deal: #34d399;
+  --primary-action: #38bdf8;
+  --primary-action-hover: #7dd3fc;
   --deal-bg: #064e3b;
   --deal-border: #059669;
   --deal-strong: #6ee7b7;
@@ -210,17 +214,18 @@ code {
   white-space: nowrap;
 }
 .btn:hover { border-color: var(--btn-hover-border); background: var(--btn-hover-bg); }
+a.btn { text-decoration: none; }
 .btn:active { transform: translateY(1px); }
 .btn-primary {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: var(--primary-action);
+  border-color: var(--primary-action);
   color: #fff;
   font-weight: 600;
 }
 html[data-theme="dark"] .btn-primary {
   color: #0b1220;
 }
-.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.btn-primary:hover { background: var(--primary-action-hover); border-color: var(--primary-action-hover); }
 .btn-danger {
   background: var(--btn-danger-bg);
   border-color: var(--btn-danger-border);
@@ -310,49 +315,22 @@ html[data-theme="dark"] .theme-when-dark.btn-ico-label,
 .chip strong { color: var(--deal); font-variant-numeric: tabular-nums; }
 .data-note { margin: 10px 0 0; font-size: 0.78rem; }
 
-/* —— Stats —— */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.stat {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
-  box-shadow: var(--shadow);
-}
-.stat .k { font-size: 0.75rem; color: var(--muted); }
-.stat .v {
-  font-size: 1.25rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  margin-top: 2px;
-}
-.stat.deal {
-  background: var(--stat-deal-bg);
-  border-color: var(--deal-border);
-}
-.stat.deal .v { color: var(--deal); }
-
 /* —— Layout —— */
 /* 价格趋势单独一行全宽，不与列表并排占列 */
 .layout {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px;
   align-items: start;
 }
 @media (max-width: 980px) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
 }
 .side-card {
   width: 100%;
 }
 
 .card {
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -591,19 +569,18 @@ tr.superseded-row .price {
 @media (min-width: 761px) {
   .desktop-only { display: block !important; }
   .mobile-only { display: none !important; }
-  .fare-cards { display: none !important; }
   .table-wrap.desktop-only { display: block !important; }
 }
 @media (max-width: 760px) {
   .desktop-only { display: none !important; }
   .table-wrap.desktop-only { display: none !important; }
   .mobile-only { display: block !important; }
-  .fare-cards.mobile-only { display: flex !important; }
   .top-actions .btn { min-height: var(--touch); padding: 10px 12px; }
   .brand h1 { font-size: 1.35rem; }
 }
 
 .fare-cards {
+  display: flex;
   flex-direction: column;
   gap: 10px;
 }
@@ -615,17 +592,6 @@ tr.superseded-row .price {
   position: relative;
   overflow: hidden;
 }
-.fare-card.deal {
-  border-color: var(--deal-border);
-  background: var(--fare-card-deal-bg);
-}
-.fare-card.deal::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px;
-  background: var(--deal);
-}
 .fare-card.example { opacity: 0.78; }
 .fare-card-top {
   display: flex;
@@ -635,7 +601,8 @@ tr.superseded-row .price {
 }
 .fare-card-route { font-weight: 700; font-size: 1rem; }
 .fare-card-price {
-  font-size: 1.35rem;
+  font-size: 1.6rem;
+  line-height: 1.1;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -823,24 +790,19 @@ tr.superseded-row .price {
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
-
-.footer-note {
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 0.78rem;
-  text-align: center;
+.toast-action {
+  margin-left: 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
 }
-
-.notes-clamp {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  max-width: 200px;
-  word-break: break-word;
-}
-
 
 /* —— UX: prefs danger zone (clear local, away from filter reset) —— */
 .prefs-danger {
@@ -1192,3 +1154,554 @@ html[data-theme="dark"] .return-rec-item .rr-days { color: var(--primary); }
 }
 .more-menu-item:hover { background: var(--btn-hover-bg); }
 .more-menu-danger { color: var(--danger); }
+
+/* —— 顶栏次要操作收纳 —— */
+.top-more { position: relative; }
+.top-more > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.top-more > summary::-webkit-details-marker { display: none; }
+.top-more-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 180px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 30;
+}
+.top-more-panel .btn {
+  justify-content: flex-start;
+  width: 100%;
+  border-color: transparent;
+  background: transparent;
+  min-height: var(--touch);
+}
+.top-more-panel .btn:hover { background: var(--btn-hover-bg); }
+
+/* —— 键盘可达性 —— */
+th[data-sort] { cursor: pointer; }
+th[data-sort]:focus-visible {
+  outline: 2px solid var(--primary-action);
+  outline-offset: -2px;
+}
+:focus-visible {
+  outline: 2px solid var(--primary-action);
+  outline-offset: 2px;
+}
+
+/* —— 国家芯片 —— */
+.field-wide { grid-column: 1 / -1; }
+.field-title { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+.fchip:hover { border-color: var(--btn-hover-border); background: var(--btn-hover-bg); }
+.fchip-count {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.fchip[aria-pressed="true"] {
+  background: var(--filter-pill-bg);
+  border-color: var(--primary-action);
+  color: var(--filter-pill-color);
+  font-weight: 600;
+}
+.fchip[aria-pressed="true"] .fchip-count { color: var(--filter-pill-color); }
+
+/* —— 尊重系统减少动效设置 —— */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* —— 票价行（宽行，桌面）/ 纵向（手机）—— */
+.fare-card { padding: 0; overflow: hidden; }
+.fare-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) 130px 150px;
+  gap: 12px 18px;
+  align-items: center;
+  padding: 14px 16px;
+}
+.fare-route-title { font-weight: 700; font-size: 1.02rem; }
+.fare-route-sub { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+.fare-route .badge-row { margin-top: 6px; }
+.fare-date { font-weight: 600; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.fare-airline, .fare-seen { font-size: 0.82rem; color: var(--fare-card-meta); margin-top: 2px; }
+.fare-seen { color: var(--muted); }
+.fare-price-col { text-align: right; }
+.fare-price {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.fare-price.deal { color: var(--deal-strong); }
+.deal-note { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+.deal-note.under { color: var(--deal-strong); font-weight: 600; }
+.fare-cta-col { text-align: right; }
+.fare-cta { width: 100%; justify-content: center; min-height: 40px; }
+.fare-cta-none { font-size: 0.82rem; }
+.fare-more { border-top: 1px solid var(--border); padding: 0 16px; }
+.fare-more > summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.fare-more > summary::-webkit-details-marker { display: none; }
+.fare-more > summary::after { content: "▾"; margin-left: auto; transition: transform 0.15s ease; }
+.fare-more[open] > summary::after { transform: rotate(180deg); }
+.fare-detail-body { display: grid; gap: 10px; padding: 0 0 14px; }
+.fare-notes { margin: 0; font-size: 0.88rem; color: var(--fare-card-meta); }
+.fare-admin { display: flex; gap: 8px; }
+@media (max-width: 760px) {
+  .fare-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "route price"
+      "when  price"
+      "cta   cta";
+    padding: 14px;
+  }
+  .fare-route { grid-area: route; }
+  .fare-when { grid-area: when; }
+  .fare-price-col { grid-area: price; }
+  .fare-cta-col { grid-area: cta; }
+}
+
+/* —— 页面摘要 · 价格说明 · 对比折叠 —— */
+.page-summary {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.page-summary strong { color: var(--text); font-variant-numeric: tabular-nums; }
+.price-note { margin: 12px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; }
+.compare-fold {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 14px;
+}
+.compare-fold > summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.compare-fold > summary::-webkit-details-marker { display: none; }
+.compare-fold > summary::after { content: "▾"; margin-left: auto; color: var(--muted); }
+.compare-fold[open] > summary::after { transform: rotate(180deg); }
+.compare-fold .compare-body { padding-bottom: 12px; }
+
+/* —— 筛选工具栏（压缩版）—— */
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.filters-row > .chip-row { flex: 0 1 auto; }
+.filters-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sort-field { margin: 0; }
+.sort-field select { min-height: 40px; width: 180px; }
+.filters-more { position: relative; }
+.filters-more > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.filters-more > summary::-webkit-details-marker { display: none; }
+.filters-more[open] > summary { border-color: var(--primary-action); }
+.filters-more-count { margin-left: 6px; color: var(--primary-action); font-weight: 600; }
+.filters-more-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  width: min(560px, 92vw);
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  z-index: 25;
+}
+@media (max-width: 760px) {
+  .filters-tools { width: 100%; }
+  .sort-field { flex: 1 1 auto; }
+  .sort-field select { width: 100%; }
+}
+@media (max-width: 520px) {
+  .filters-more-panel { left: 0; right: auto; width: 100%; grid-template-columns: 1fr; }
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* —— 详情：行尾入口，桌面浮层展开，手机原位展开 —— */
+.fare-card { overflow: visible; position: relative; }
+.fare-cta-col .fare-more { margin-top: 6px; position: relative; }
+.fare-cta-col .fare-more > summary {
+  min-height: 30px;
+  justify-content: flex-end;
+  font-size: 0.82rem;
+  padding: 0;
+  cursor: pointer;
+}
+.fare-cta-col .fare-more[open] .fare-detail-body {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  width: min(440px, 86vw);
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  z-index: 15;
+  text-align: left;
+}
+.fare-more { border: 0; padding: 0; }
+@media (max-width: 760px) {
+  .fare-cta-col .fare-more > summary { justify-content: flex-start; }
+  .fare-cta-col .fare-more[open] .fare-detail-body {
+    position: static;
+    width: auto;
+    padding: 0 0 6px;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
+/* —— 加载骨架 / 错误态 —— */
+.skeleton-card {
+  height: 96px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(90deg, var(--surface), var(--btn-hover-bg), var(--surface));
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s linear infinite;
+}
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.empty-actions { margin-top: 10px; }
+
+/* —— 手风琴式详情（行下方原位展开）—— */
+.fare-cta-col .fare-toggle {
+  margin-top: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 30px;
+  padding: 0 2px;
+}
+.fare-toggle:hover { color: var(--text); }
+.fare-toggle::after { content: " ▾"; }
+.fare-toggle[aria-expanded="true"]::after { content: " ▴"; }
+.fare-detail {
+  border-top: 1px solid var(--border);
+  padding: 12px 16px 14px;
+  display: grid;
+  gap: 10px;
+}
+.fare-detail[hidden] { display: none; }
+.fare-price-note { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+.fare-price { color: var(--text); }
+.deal-note.under { color: var(--deal-strong); font-weight: 600; }
+
+/* 票价操作：低强调描边，悬停 / 聚焦时强调 */
+.fare-cta {
+  width: 100%;
+  justify-content: center;
+  min-height: 40px;
+  color: var(--primary-action);
+  border-color: var(--primary-action);
+  background: transparent;
+  font-weight: 600;
+}
+.fare-cta:hover,
+.fare-cta:focus-visible {
+  background: var(--primary-action);
+  color: #fff;
+}
+html[data-theme="dark"] .fare-cta:hover,
+html[data-theme="dark"] .fare-cta:focus-visible { color: #0b1220; }
+
+
+/* —— 通知条 —— */
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--btn-danger-border);
+  background: var(--btn-danger-bg);
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.notice[hidden] { display: none; }
+
+/* —— 更多筛选：草稿与应用；手机端为底部面板 —— */
+.filters-more-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.add-inline { display: none; }
+@media (max-width: 760px) {
+  #btn-add { display: none; }
+  .add-inline { display: inline-flex; }
+}
+
+.filters-more-hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.fare-meta-full { margin: 0; font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.fare-price.price-pending { font-size: 1rem; color: var(--muted); font-weight: 600; }
+.hist-scope { margin: 4px 0 0; color: var(--muted); font-size: 0.78rem; }
+
+/* Native modal provides background inertness and keyboard focus containment. */
+.filters-dialog {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+.filters-dialog:not([open]) { display: none; }
+.filters-dialog[open] {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-height: min(82vh, 82dvh);
+  overflow-y: auto;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  border-radius: 16px 16px 0 0;
+  background: var(--surface);
+  box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.25);
+}
+.filters-dialog::backdrop { background: rgba(2, 6, 23, 0.52); }
+.filters-dialog .filters-more-panel {
+  position: static;
+  inset: auto;
+  width: auto;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  grid-template-columns: 1fr;
+  z-index: auto;
+}
+body.filters-modal-open { overflow: hidden; }
+.undo-toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 51;
+  max-width: calc(100vw - 24px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--toast-color);
+  background: var(--toast-bg);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+}
+.undo-toast[hidden] { display: none; }
+body.has-undo-toast .toast { bottom: max(76px, calc(env(safe-area-inset-bottom) + 64px)); }
+
+/* Compact mobile filters and keep destructive/primary actions distinct. */
+.filters-panel-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.filters-panel-head h2 { margin: 0; font-size: 1rem; }
+.filters-panel-head .btn { min-height: var(--touch); }
+.filter-clear-all {
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--primary-action);
+  padding: 4px 8px;
+  min-height: var(--touch);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.filter-clear-all:hover { background: var(--btn-hover-bg); }
+
+@media (max-width: 760px) {
+  .app { padding: 10px 12px 40px; }
+  .topbar { gap: 8px; margin-bottom: 6px; }
+  .brand p { margin-top: 2px; font-size: 0.84rem; }
+  .page-summary { margin-bottom: 6px; font-size: 0.82rem; }
+  .card-head { padding: 8px 12px; }
+  .card-head-actions .btn { min-height: var(--touch); }
+  .card-body { padding: 10px 12px; }
+  .filters { gap: 5px; margin-bottom: 6px; }
+  .filters > .field-wide:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .filters > .field-wide:first-child .field-title { flex: 0 0 auto; margin: 0; }
+  #filter-country {
+    flex: 1 1 0;
+    position: relative;
+    min-width: 0;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 4px;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 4px;
+    scrollbar-width: thin;
+  }
+  #filter-country .fchip { flex: 0 0 auto; min-height: var(--touch); }
+  #filter-country.has-overflow:not(.at-end)::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    right: 0;
+    bottom: 4px;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, var(--surface) 82%);
+    pointer-events: none;
+  }
+  .filters-row { gap: 6px; }
+  #filter-deal { gap: 6px; }
+  #filter-deal .fchip { min-height: var(--touch); }
+  .filters-tools {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    width: 100%;
+  }
+  .sort-field { min-width: 0; }
+  .sort-field select { width: 100%; min-height: var(--touch); }
+  .filters-more > summary { display: inline-flex; align-items: center; min-height: var(--touch); }
+  .active-filters { gap: 4px; margin: -2px 0 8px; }
+  .filter-pill { min-height: 32px; align-items: center; }
+  .fare-cards { gap: 8px; }
+  .fare-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 14px 12px;
+  }
+  .fare-route, .fare-when, .fare-price-col, .fare-cta-col { min-width: 0; }
+  .fare-route-title, .fare-airline { overflow-wrap: anywhere; }
+  .fare-route-sub, .fare-airline { line-height: 1.3; }
+  .fare-price { font-size: 1.45rem; }
+  .fare-cta-col { display: flex; align-items: center; gap: 8px; }
+  .fare-cta-col .fare-cta,
+  .fare-cta-col .fare-cta-none { flex: 1 1 0; min-width: 0; min-height: var(--touch); }
+  .fare-cta-col .fare-cta-none { display: flex; align-items: center; justify-content: center; }
+  .fare-cta-col .fare-toggle { flex: 0 0 auto; min-height: var(--touch); margin: 0; padding: 0 6px; }
+  .filters-dialog .filters-more-panel { gap: 8px; }
+  .filters-dialog .filters-panel-head {
+    position: sticky;
+    top: -16px;
+    z-index: 2;
+    margin: -16px -16px 2px;
+    padding: 8px 16px;
+    background: var(--surface);
+  }
+  .filters-dialog .filters-more-actions {
+    position: sticky;
+    bottom: -16px;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    margin: 0 -16px -16px;
+    padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .filters-dialog .filters-more-actions .btn { min-height: var(--touch); }
+  .filters-more-hint { font-size: 0.76rem; line-height: 1.35; }
+}
