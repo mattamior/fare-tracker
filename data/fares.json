@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-24T08:00:53.686+08:00",
-  "next_id": 173,
+  "updated_at": "2026-10-24T09:00:31.693+08:00",
+  "next_id": 175,
   "fares": [
     {
       "id": 1,
@@ -3332,6 +3332,46 @@
       "price_cny": 781,
       "notes": "Google Flights 扫票 2026-10-24 08:00 11:25 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-21",
       "found_at": "2026-10-24T08:00:53.686+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 173,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-14",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 1078,
+      "notes": "Google Flights 扫票 2026-10-24 09:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-14",
+      "found_at": "2026-10-24T09:00:31.664+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 174,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-21",
+      "return_date": "",
+      "airline": "春秋航空",
+      "stops": "直飞",
+      "price_cny": 692,
+      "notes": "Google Flights 扫票 2026-10-24 09:00 5:55 AM 起飞 2 hr 55 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-11-21",
+      "found_at": "2026-10-24T09:00:31.693+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
