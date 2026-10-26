@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-26T12:00:43.363+08:00",
-  "next_id": 227,
+  "updated_at": "2026-10-26T13:00:37.559+08:00",
+  "next_id": 228,
   "fares": [
     {
       "id": 1,
@@ -4126,7 +4126,9 @@
       "found_at": "2026-10-26T03:00:35.330+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 227,
+      "superseded_at": "2026-10-26T13:00:37.559+08:00"
     },
     {
       "id": 212,
@@ -4424,6 +4426,26 @@
       "price_cny": 2073,
       "notes": "Google Flights 扫票 2026-10-26 12:00 9:00 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-11-09",
       "found_at": "2026-10-26T12:00:43.363+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 227,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-23",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 912,
+      "notes": "Google Flights 扫票 2026-10-26 13:00 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-23",
+      "found_at": "2026-10-26T13:00:37.559+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
