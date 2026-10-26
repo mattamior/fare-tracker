@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-26T23:00:39.366+08:00",
-  "next_id": 232,
+  "updated_at": "2026-10-27T00:00:34.150+08:00",
+  "next_id": 234,
   "fares": [
     {
       "id": 1,
@@ -1284,7 +1284,9 @@
       "found_at": "2026-10-20T19:03:35+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 232,
+      "superseded_at": "2026-10-27T00:00:34.096+08:00"
     },
     {
       "id": 71,
@@ -4535,6 +4537,46 @@
       "notes": "Google Flights 扫票 2026-10-26 23:00 2:30 AM 起飞 2 hr 40 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Ho%20Chi%20Minh%20City%20on%202026-11-09",
       "found_at": "2026-10-26T23:00:39.366+08:00",
       "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 232,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-10",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 898,
+      "notes": "Google Flights 扫票 2026-10-27 00:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-10",
+      "found_at": "2026-10-27T00:00:34.096+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 233,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-24",
+      "return_date": "",
+      "airline": "印尼鹰航",
+      "stops": "直飞",
+      "price_cny": 1792,
+      "notes": "Google Flights 扫票 2026-10-27 00:00 9:00 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-11-24",
+      "found_at": "2026-10-27T00:00:34.150+08:00",
+      "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
     }
