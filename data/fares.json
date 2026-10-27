@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-27T08:00:37.069+08:00",
-  "next_id": 249,
+  "updated_at": "2026-10-27T09:00:34.508+08:00",
+  "next_id": 251,
   "fares": [
     {
       "id": 1,
@@ -1274,7 +1274,9 @@
       "found_at": "2026-10-20T18:01:47+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 249,
+      "superseded_at": "2026-10-27T09:00:34.479+08:00"
     },
     {
       "id": 70,
@@ -4890,6 +4892,46 @@
       "price_cny": 675,
       "notes": "Google Flights 扫票 2026-10-27 08:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-24",
       "found_at": "2026-10-27T08:00:37.069+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 249,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-17",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 898,
+      "notes": "Google Flights 扫票 2026-10-27 09:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-17",
+      "found_at": "2026-10-27T09:00:34.479+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 250,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "DMK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-24",
+      "return_date": "",
+      "airline": "Thai AirAsia",
+      "stops": "直飞",
+      "price_cny": 666,
+      "notes": "Google Flights 扫票 2026-10-27 09:00 12:05 AM 起飞 2 hr 50 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-11-24",
+      "found_at": "2026-10-27T09:00:34.508+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
