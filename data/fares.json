@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-10-28T04:00:36.510+08:00",
-  "next_id": 271,
+  "updated_at": "2026-10-28T05:00:40.943+08:00",
+  "next_id": 274,
   "fares": [
     {
       "id": 1,
@@ -1756,7 +1756,9 @@
       "found_at": "2026-10-21T04:00:20+08:00",
       "meets_deal_bar": true,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 272,
+      "superseded_at": "2026-10-28T05:00:40.922+08:00"
     },
     {
       "id": 93,
@@ -2020,7 +2022,9 @@
       "found_at": "2026-10-21T14:00:24+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 271,
+      "superseded_at": "2026-10-28T05:00:40.896+08:00"
     },
     {
       "id": 106,
@@ -5365,6 +5369,66 @@
       "notes": "Google Flights 扫票 2026-10-28 04:00 5:30 PM 起飞 5 hr 30 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-11-25",
       "found_at": "2026-10-28T04:00:36.510+08:00",
       "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 271,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-11",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 983,
+      "notes": "Google Flights 扫票 2026-10-28 05:00 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-11",
+      "found_at": "2026-10-28T05:00:40.896+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 272,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-18",
+      "return_date": "",
+      "airline": "春秋航空",
+      "stops": "直飞",
+      "price_cny": 760,
+      "notes": "Google Flights 扫票 2026-10-28 05:00 5:30 PM 起飞 5 hr 30 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-11-18",
+      "found_at": "2026-10-28T05:00:40.922+08:00",
+      "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 273,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-25",
+      "return_date": "",
+      "airline": "南航",
+      "stops": "直飞",
+      "price_cny": 1079,
+      "notes": "Google Flights 扫票 2026-10-28 05:00 9:00 AM 起飞 3 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Bangkok%20on%202026-11-25",
+      "found_at": "2026-10-28T05:00:40.943+08:00",
+      "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
     }
