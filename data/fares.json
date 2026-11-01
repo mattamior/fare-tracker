@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-01T08:00:42.215+08:00",
-  "next_id": 341,
+  "updated_at": "2026-11-01T09:00:33.913+08:00",
+  "next_id": 342,
   "fares": [
     {
       "id": 1,
@@ -6846,6 +6846,26 @@
       "price_cny": 718,
       "notes": "Google Flights 扫票 2026-11-01 08:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-29",
       "found_at": "2026-11-01T08:00:42.215+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 341,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-29",
+      "return_date": "",
+      "airline": "南航",
+      "stops": "直飞",
+      "price_cny": 1029,
+      "notes": "Google Flights 扫票 2026-11-01 09:00 12:50 PM 起飞 3 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-11-29",
+      "found_at": "2026-11-01T09:00:33.913+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
