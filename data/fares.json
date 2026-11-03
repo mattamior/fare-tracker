@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T12:00:53.233+08:00",
-  "next_id": 386,
+  "updated_at": "2026-11-03T13:00:57.786+08:00",
+  "next_id": 387,
   "fares": [
     {
       "id": 1,
@@ -7796,6 +7796,26 @@
       "price_cny": 908,
       "notes": "Google Flights 扫票 2026-11-03 12:00 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-24",
       "found_at": "2026-11-03T12:00:53.233+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 386,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-12-01",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 855,
+      "notes": "Google Flights 扫票 2026-11-03 13:00 6:35 PM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-12-01",
+      "found_at": "2026-11-03T13:00:57.786+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
