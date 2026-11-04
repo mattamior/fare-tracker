@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-04T06:00:40.265+08:00",
-  "next_id": 409,
+  "updated_at": "2026-11-04T09:00:38.032+08:00",
+  "next_id": 410,
   "fares": [
     {
       "id": 1,
@@ -8286,6 +8286,26 @@
       "price_cny": 2071,
       "notes": "Google Flights 扫票 2026-11-04 06:00 9:00 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-12-02",
       "found_at": "2026-11-04T06:00:40.265+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 409,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "DMK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-02",
+      "return_date": "",
+      "airline": "泰狮航",
+      "stops": "直飞",
+      "price_cny": 523,
+      "notes": "Google Flights 扫票 2026-11-04 09:00 2:00 PM 起飞 2 hr 45 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-12-02",
+      "found_at": "2026-11-04T09:00:38.032+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
