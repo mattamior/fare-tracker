@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-07T08:00:40.928+08:00",
-  "next_id": 510,
+  "updated_at": "2026-11-07T09:00:45.612+08:00",
+  "next_id": 512,
   "fares": [
     {
       "id": 1,
@@ -10438,6 +10438,46 @@
       "price_cny": 831,
       "notes": "Google Flights 扫票 2026-11-07 08:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-12-05",
       "found_at": "2026-11-07T08:00:40.928+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 510,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-28",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 747,
+      "notes": "Google Flights 扫票 2026-11-07 09:00 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-28",
+      "found_at": "2026-11-07T09:00:45.583+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 511,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-05",
+      "return_date": "",
+      "airline": "Kenya Airways",
+      "stops": "直飞",
+      "price_cny": 696,
+      "notes": "Google Flights 扫票 2026-11-07 09:00 9:40 PM 起飞 2 hr 55 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-12-05",
+      "found_at": "2026-11-07T09:00:45.612+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
