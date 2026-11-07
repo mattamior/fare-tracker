@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-08T06:00:37.849+08:00",
-  "next_id": 534,
+  "updated_at": "2026-11-08T07:00:39.782+08:00",
+  "next_id": 536,
   "fares": [
     {
       "id": 1,
@@ -3840,7 +3840,9 @@
       "found_at": "2026-10-25T05:00:39.879+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 534,
+      "superseded_at": "2026-11-08T07:00:39.756+08:00"
     },
     {
       "id": 192,
@@ -6912,7 +6914,9 @@
       "found_at": "2026-11-01T06:00:41.422+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 535,
+      "superseded_at": "2026-11-08T07:00:39.782+08:00"
     },
     {
       "id": 337,
@@ -10950,6 +10954,46 @@
       "price_cny": 525,
       "notes": "Google Flights 扫票 2026-11-08 06:00 2:00 PM 起飞 2 hr 45 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-12-06",
       "found_at": "2026-11-08T06:00:37.849+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 534,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-22",
+      "return_date": "",
+      "airline": "南航",
+      "stops": "直飞",
+      "price_cny": 1129,
+      "notes": "Google Flights 扫票 2026-11-08 07:00 9:00 AM 起飞 3 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Bangkok%20on%202026-11-22",
+      "found_at": "2026-11-08T07:00:39.756+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 535,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-29",
+      "return_date": "",
+      "airline": "香港快运",
+      "stops": "直飞",
+      "price_cny": 665,
+      "notes": "Google Flights 扫票 2026-11-08 07:00 7:50 AM 起飞 3 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-11-29",
+      "found_at": "2026-11-08T07:00:39.782+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
