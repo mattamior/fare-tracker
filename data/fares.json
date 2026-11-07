@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-08T04:00:45.992+08:00",
-  "next_id": 529,
+  "updated_at": "2026-11-08T05:00:41.674+08:00",
+  "next_id": 531,
   "fares": [
     {
       "id": 1,
@@ -7138,7 +7138,9 @@
       "found_at": "2026-11-01T13:00:33.608+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 529,
+      "superseded_at": "2026-11-08T05:00:41.622+08:00"
     },
     {
       "id": 348,
@@ -10845,6 +10847,46 @@
       "notes": "Google Flights 扫票 2026-11-08 04:00 5:30 PM 起飞 5 hr 30 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-12-06",
       "found_at": "2026-11-08T04:00:45.992+08:00",
       "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 529,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-22",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 1914,
+      "notes": "Google Flights 扫票 2026-11-08 05:00 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-22",
+      "found_at": "2026-11-08T05:00:41.622+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 530,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-06",
+      "return_date": "",
+      "airline": "南航",
+      "stops": "直飞",
+      "price_cny": 1129,
+      "notes": "Google Flights 扫票 2026-11-08 05:00 9:00 AM 起飞 3 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Bangkok%20on%202026-12-06",
+      "found_at": "2026-11-08T05:00:41.674+08:00",
+      "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
     }
