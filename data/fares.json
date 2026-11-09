@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-09T16:00:39.245+08:00",
-  "next_id": 569,
+  "updated_at": "2026-11-09T18:00:38.381+08:00",
+  "next_id": 570,
   "fares": [
     {
       "id": 1,
@@ -11584,7 +11584,9 @@
       "found_at": "2026-11-09T08:00:35.842+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 569,
+      "superseded_at": "2026-11-09T18:00:38.381+08:00"
     },
     {
       "id": 563,
@@ -11703,6 +11705,26 @@
       "notes": "Google Flights 扫票 2026-11-09 16:00 5:30 PM 起飞 5 hr 30 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-11-23",
       "found_at": "2026-11-09T16:00:39.245+08:00",
       "meets_deal_bar": true,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 569,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-23",
+      "return_date": "",
+      "airline": "香港快运",
+      "stops": "直飞",
+      "price_cny": 665,
+      "notes": "Google Flights 扫票 2026-11-09 18:00 4:55 PM 起飞 3 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-11-23",
+      "found_at": "2026-11-09T18:00:38.381+08:00",
+      "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
     }
