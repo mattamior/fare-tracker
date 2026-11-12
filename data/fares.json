@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-13T00:01:27.649+08:00",
-  "next_id": 657,
+  "updated_at": "2026-11-13T01:01:55.645+08:00",
+  "next_id": 660,
   "fares": [
     {
       "id": 1,
@@ -9930,7 +9930,9 @@
       "found_at": "2026-11-06T10:00:46.873+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 657,
+      "superseded_at": "2026-11-13T01:01:55.594+08:00"
     },
     {
       "id": 478,
@@ -9950,7 +9952,9 @@
       "found_at": "2026-11-06T10:00:46.896+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 658,
+      "superseded_at": "2026-11-13T01:01:55.622+08:00"
     },
     {
       "id": 479,
@@ -13583,6 +13587,66 @@
       "notes": "Google Flights 扫票 2026-11-13 00:01 9:15 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-12-11",
       "found_at": "2026-11-13T00:01:27.649+08:00",
       "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 657,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-27",
+      "return_date": "",
+      "airline": "THAI",
+      "stops": "直飞",
+      "price_cny": 1186,
+      "notes": "Google Flights 扫票 2026-11-13 01:01 8:25 PM 起飞 3 hr 20 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-11-27",
+      "found_at": "2026-11-13T01:01:55.594+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 658,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-04",
+      "return_date": "",
+      "airline": "国泰",
+      "stops": "直飞",
+      "price_cny": 2096,
+      "notes": "Google Flights 扫票 2026-11-13 01:01 9:15 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-12-04",
+      "found_at": "2026-11-13T01:01:55.622+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 659,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "越南",
+      "destination_city": "胡志明市",
+      "destination_airport": "SGN",
+      "trip_type": "单程",
+      "depart_date": "2026-12-11",
+      "return_date": "",
+      "airline": "越捷",
+      "stops": "直飞",
+      "price_cny": 570,
+      "notes": "Google Flights 扫票 2026-11-13 01:01 2:30 AM 起飞 2 hr 40 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Ho%20Chi%20Minh%20City%20on%202026-12-11",
+      "found_at": "2026-11-13T01:01:55.645+08:00",
+      "meets_deal_bar": true,
       "deal_bar_override": null,
       "is_example": false
     }
