@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-12T21:01:39.514+08:00",
-  "next_id": 654,
+  "updated_at": "2026-11-13T00:01:27.649+08:00",
+  "next_id": 657,
   "fares": [
     {
       "id": 1,
@@ -9864,7 +9864,9 @@
       "found_at": "2026-11-06T09:00:38.568+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 654,
+      "superseded_at": "2026-11-13T00:01:27.598+08:00"
     },
     {
       "id": 475,
@@ -9884,7 +9886,9 @@
       "found_at": "2026-11-06T09:00:38.595+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 655,
+      "superseded_at": "2026-11-13T00:01:27.626+08:00"
     },
     {
       "id": 476,
@@ -13518,6 +13522,66 @@
       "price_cny": 770,
       "notes": "Google Flights 扫票 2026-11-12 21:01 4:05 PM 起飞 2 hr 50 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Ho%20Chi%20Minh%20City%20on%202026-12-10",
       "found_at": "2026-11-12T21:01:39.514+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 654,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-27",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 674,
+      "notes": "Google Flights 扫票 2026-11-13 00:01 11:25 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-27",
+      "found_at": "2026-11-13T00:01:27.598+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 655,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-04",
+      "return_date": "",
+      "airline": "THAI",
+      "stops": "直飞",
+      "price_cny": 896,
+      "notes": "Google Flights 扫票 2026-11-13 00:01 8:25 PM 起飞 3 hr 20 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Bangkok%20on%202026-12-04",
+      "found_at": "2026-11-13T00:01:27.626+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 656,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-11",
+      "return_date": "",
+      "airline": "国泰",
+      "stops": "直飞",
+      "price_cny": 2096,
+      "notes": "Google Flights 扫票 2026-11-13 00:01 9:15 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-12-11",
+      "found_at": "2026-11-13T00:01:27.649+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
