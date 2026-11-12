@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-12T06:00:52.258+08:00",
-  "next_id": 643,
+  "updated_at": "2026-11-12T08:01:06.769+08:00",
+  "next_id": 645,
   "fares": [
     {
       "id": 1,
@@ -9214,7 +9214,9 @@
       "found_at": "2026-11-05T07:00:38.632+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 643,
+      "superseded_at": "2026-11-12T08:01:06.743+08:00"
     },
     {
       "id": 444,
@@ -13280,6 +13282,46 @@
       "price_cny": 852,
       "notes": "Google Flights 扫票 2026-11-12 06:00 4:55 PM 起飞 3 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-12-10",
       "found_at": "2026-11-12T06:00:52.258+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 643,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "BKK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-26",
+      "return_date": "",
+      "airline": "香港快运",
+      "stops": "直飞",
+      "price_cny": 690,
+      "notes": "Google Flights 扫票 2026-11-12 08:01 4:55 PM 起飞 3 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-11-26",
+      "found_at": "2026-11-12T08:01:06.743+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 644,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-12-10",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 960,
+      "notes": "Google Flights 扫票 2026-11-12 08:01 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-12-10",
+      "found_at": "2026-11-12T08:01:06.769+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
