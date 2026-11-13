@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-13T15:01:13.005+08:00",
-  "next_id": 677,
+  "updated_at": "2026-11-13T16:01:44.245+08:00",
+  "next_id": 678,
   "fares": [
     {
       "id": 1,
@@ -14006,6 +14006,26 @@
       "price_cny": 838,
       "notes": "Google Flights 扫票 2026-11-13 15:01 11:55 AM 起飞 4 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Kuala%20Lumpur%20on%202026-11-27",
       "found_at": "2026-11-13T15:01:13.005+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 677,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "泰国",
+      "destination_city": "曼谷",
+      "destination_airport": "DMK",
+      "trip_type": "单程",
+      "depart_date": "2026-12-11",
+      "return_date": "",
+      "airline": "泰狮航",
+      "stops": "直飞",
+      "price_cny": 923,
+      "notes": "Google Flights 扫票 2026-11-13 16:01 2:00 PM 起飞 2 hr 45 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Bangkok%20on%202026-12-11",
+      "found_at": "2026-11-13T16:01:44.245+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
