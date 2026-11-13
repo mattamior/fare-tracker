@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-13T17:01:44.089+08:00",
-  "next_id": 679,
+  "updated_at": "2026-11-13T19:01:41.204+08:00",
+  "next_id": 680,
   "fares": [
     {
       "id": 1,
@@ -13930,7 +13930,9 @@
       "found_at": "2026-11-13T09:01:25.935+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 679,
+      "superseded_at": "2026-11-13T19:01:41.204+08:00"
     },
     {
       "id": 673,
@@ -14048,6 +14050,26 @@
       "price_cny": 1639,
       "notes": "Google Flights 扫票 2026-11-13 17:01 9:00 AM 起飞 3 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Bangkok%20on%202026-11-27",
       "found_at": "2026-11-13T17:01:44.089+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 679,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-12-04",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 748,
+      "notes": "Google Flights 扫票 2026-11-13 19:01 3:15 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-12-04",
+      "found_at": "2026-11-13T19:01:41.204+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
