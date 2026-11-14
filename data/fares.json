@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-14T10:01:50.165+08:00",
-  "next_id": 700,
+  "updated_at": "2026-11-14T12:01:50.471+08:00",
+  "next_id": 701,
   "fares": [
     {
       "id": 1,
@@ -10700,7 +10700,9 @@
       "found_at": "2026-11-07T11:00:50.544+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 700,
+      "superseded_at": "2026-11-14T12:01:50.471+08:00"
     },
     {
       "id": 514,
@@ -14498,6 +14500,26 @@
       "price_cny": 2096,
       "notes": "Google Flights 扫票 2026-11-14 10:01 9:15 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-12-12",
       "found_at": "2026-11-14T10:01:50.165+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 700,
+      "origin": [
+        "HKG"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-28",
+      "return_date": "",
+      "airline": "国泰",
+      "stops": "直飞",
+      "price_cny": 2096,
+      "notes": "Google Flights 扫票 2026-11-14 12:01 9:15 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Hong%20Kong%20to%20Jakarta%20on%202026-11-28",
+      "found_at": "2026-11-14T12:01:50.471+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
