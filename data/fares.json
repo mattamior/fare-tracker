@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-14T15:01:38.523+08:00",
-  "next_id": 706,
+  "updated_at": "2026-11-14T16:02:46.502+08:00",
+  "next_id": 707,
   "fares": [
     {
       "id": 1,
@@ -10446,7 +10446,9 @@
       "found_at": "2026-11-07T05:00:44.465+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 706,
+      "superseded_at": "2026-11-14T16:02:46.502+08:00"
     },
     {
       "id": 502,
@@ -14624,6 +14626,26 @@
       "price_cny": 1129,
       "notes": "Google Flights 扫票 2026-11-14 15:01 9:00 AM 起飞 3 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Bangkok%20on%202026-12-12",
       "found_at": "2026-11-14T15:01:38.523+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 706,
+      "origin": [
+        "CAN"
+      ],
+      "destination_country": "印尼",
+      "destination_city": "雅加达",
+      "destination_airport": "CGK",
+      "trip_type": "单程",
+      "depart_date": "2026-11-28",
+      "return_date": "",
+      "airline": "南航",
+      "stops": "直飞",
+      "price_cny": 1857,
+      "notes": "Google Flights 扫票 2026-11-14 16:02 8:05 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-11-28",
+      "found_at": "2026-11-14T16:02:46.502+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
