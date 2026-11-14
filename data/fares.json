@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-11-14T16:02:46.502+08:00",
-  "next_id": 707,
+  "updated_at": "2026-11-14T20:01:49.126+08:00",
+  "next_id": 708,
   "fares": [
     {
       "id": 1,
@@ -14206,7 +14206,9 @@
       "found_at": "2026-11-14T00:01:34.735+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
-      "is_example": false
+      "is_example": false,
+      "superseded_by": 707,
+      "superseded_at": "2026-11-14T20:01:49.126+08:00"
     },
     {
       "id": 685,
@@ -14646,6 +14648,26 @@
       "price_cny": 1857,
       "notes": "Google Flights 扫票 2026-11-14 16:02 8:05 AM 起飞 5 hr 5 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Guangzhou%20to%20Jakarta%20on%202026-11-28",
       "found_at": "2026-11-14T16:02:46.502+08:00",
+      "meets_deal_bar": false,
+      "deal_bar_override": null,
+      "is_example": false
+    },
+    {
+      "id": 707,
+      "origin": [
+        "SZX"
+      ],
+      "destination_country": "马来西亚",
+      "destination_city": "吉隆坡",
+      "destination_airport": "KUL",
+      "trip_type": "单程",
+      "depart_date": "2026-11-28",
+      "return_date": "",
+      "airline": "亚航",
+      "stops": "直飞",
+      "price_cny": 801,
+      "notes": "Google Flights 扫票 2026-11-14 20:01 11:25 AM 起飞 4 hr 10 min；价格含税，库存可能变动；来源 https://www.google.com/travel/flights?hl=en&curr=CNY&q=Flights%20one%20way%20from%20Shenzhen%20to%20Kuala%20Lumpur%20on%202026-11-28",
+      "found_at": "2026-11-14T20:01:49.126+08:00",
       "meets_deal_bar": false,
       "deal_bar_override": null,
       "is_example": false
